@@ -42,9 +42,10 @@ $.extend(LiveSearch.prototype, {
   },
 
   search: function(value) {
+    var _this = this;
     if(this.search_xhr) this.search_xhr.abort();
     this.search_xhr = $.get(this.$form.attr('action'), this.$form.serialize(), function(data) {
-      this.$elem.trigger('livesearch:results', [data]);
+      _this.$elem.trigger('livesearch:results', [data]);
     }, 'json');
   }
 
