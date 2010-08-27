@@ -49,10 +49,10 @@ $.extend(InputDropdown.prototype, {
     this.$elem.bind(($.browser.opera ? "keypress" : "keydown") + ".autocomplete", function(e) {
       switch(e.keyCode) {
         case KEY.UP:
-          _this.select(_this.$results.find('selected').prev());
+          _this.select(_this.$results.find('.selected').prev());
           break;
         case KEY.down:
-          _this.select(_this.$results.find('selected').next());
+          _this.select(_this.$results.find('.selected').next());
           break;
         default:
           break;
