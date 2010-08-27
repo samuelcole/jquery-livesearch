@@ -20,6 +20,7 @@ function LiveSearch($elem, options) {
   this.options = $.extend({ delay: 400 }, options);
   this.last_search = false;
   this.search_xhr;
+  this.cache = {};
   this._attach();
 }
 
@@ -48,9 +49,15 @@ $.extend(LiveSearch.prototype, {
     if(value == this.last_search) return;
 
     if(this.search_xhr) this.search_xhr.abort();
-    this.search_xhr = $.get(this.$form.attr('action'), this.$form.serialize(), function(data) {
-      _this.$elem.trigger('livesearch:results', [data]);
-    }, 'json');
+    
+    if(this.cache[value]) {
+      this.$elem.trigger('livesearch:results', [this.cache[value]]);
+    } else {
+      this.search_xhr = $.get(this.$form.attr('action'), this.$form.serialize(), function(data) {
+        _this.$elem.trigger('livesearch:results', [data]);
+        _this.cache[value] = data;
+      }, 'json');
+    }
 
     this.last_search = value;
   }
