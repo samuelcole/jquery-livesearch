@@ -17,13 +17,13 @@ var KEY = {
   BACKSPACE: 8
 };
  
-$.fn.livesearch.input_dropdown = function(options) {
+$.fn.livesearch_input_dropdown = function(options) {
   options = options || {};
   return $(this).each(function() {
     var input_dropdown = $(this).data('livesearch.input_dropdown');
-		if (!livesearch) {
+		if (!input_dropdown) {
 		  input_dropdown = new InputDropdown($(this), options);
-			$(this).data('livesearch.input_dropdown', livesearch);
+			$(this).data('livesearch.input_dropdown', input_dropdown);
 		}
   });
 };
@@ -31,7 +31,7 @@ $.fn.livesearch.input_dropdown = function(options) {
 function InputDropdown($elem, options) {
 	this.$elem = $elem;
 
-  this.$results = $('<div class="results" style="position: absolute;"><ul></ul></div>');
+  this.$results = $('<div class="results" style="position: absolute; background-color: white"><ul></ul></div>');
   this.$elem.after(this.$results);
   this.$results.width(this.$elem);
   this.$results.hide();
@@ -43,7 +43,7 @@ function InputDropdown($elem, options) {
 $.extend(InputDropdown.prototype, {
   _attach: function() {
     var _this = this;
-    this.$elem.bind('live_search:results', function(e, results) {
+    this.$elem.bind('livesearch:results', function(e, results) {
       _this.show_results(results);
     });
     this.$elem.bind(($.browser.opera ? "keypress" : "keydown") + ".autocomplete", function(e) {
@@ -51,7 +51,7 @@ $.extend(InputDropdown.prototype, {
         case KEY.UP:
           _this.select(_this.$results.find('.selected').prev());
           break;
-        case KEY.down:
+        case KEY.DOWN:
           _this.select(_this.$results.find('.selected').next());
           break;
         default:
@@ -76,7 +76,8 @@ $.extend(InputDropdown.prototype, {
     this.$results.slideDown();
   },
   select: function($li) {
-    this.$results_ul.children('li').removeClass('selected');
+    var $results_ul = this.$results.children('ul');
+    $results_ul.children('li').removeClass('selected').css('font-weight', 'normal');
     $li.addClass('selected');
     $li.css('font-weight', 'bold');
     this.$elem.val($li.text());
