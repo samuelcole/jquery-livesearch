@@ -30,6 +30,8 @@ $.fn.livesearch_input_dropdown = function(options) {
 
 function InputDropdown($elem, options) {
 	this.$elem = $elem;
+  
+  this.options = $.extend({ update_input: true }, options);
 
   this.$results = $('<div class="results" style="position: absolute; background-color: white"><ul></ul></div>');
   this.$elem.after(this.$results);
@@ -99,9 +101,11 @@ $.extend(InputDropdown.prototype, {
     $li.addClass('selected');
     $li.css('font-weight', 'bold');
 
-    this.livesearch.suspend_while(function() {
-      _this.$elem.val($li.text());
-    });
+    if(this.options.update_input) {
+      this.livesearch.suspend_while(function() {
+        _this.$elem.val($li.text());
+      });
+    }
 
     this.$elem.trigger('livesearch:selected', [$li.data('livesearch_result')]);
   }
