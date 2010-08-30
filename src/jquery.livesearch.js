@@ -1,9 +1,9 @@
 (function($) {
 
- //The timeout has to live in this scope
- var timeout;
+//The timeout has to live in this scope
+var timeout;
 
- $.fn.livesearch = function(options) {
+$.fn.livesearch = function(options) {
   options = options || {};
   return $(this).each(function() {
     var livesearch = $(this).data('livesearch');
@@ -17,7 +17,7 @@
 function LiveSearch($elem, options) {
 	this.$elem = $elem;
   this.$form = $elem.closest('form');
-  this.options = $.extend({ delay: 1000, minimum_characters: 3 }, options);
+  this.options = $.extend({ delay: 400, minimum_characters: 3 }, options);
   this.last_search = false;
   this.search_xhr;
   this.cache = {};
@@ -32,8 +32,7 @@ $.extend(LiveSearch.prototype, {
       if(!_this.active) return;
 
       clearTimeout(timeout);
-      timeout = function() { _this.search_for_value(); };
-      setTimeout(timeout, _this.options.delay);
+      timeout = setTimeout(function() {_this.search_for_value();}, _this.options.delay);
     });
     this.$form.bind("submit", function(e) {
       if(!_this.active) return;
