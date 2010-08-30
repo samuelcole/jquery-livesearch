@@ -47,12 +47,23 @@ $.extend(InputDropdown.prototype, {
       _this.show_results(results);
     });
     this.$elem.bind(($.browser.opera ? "keypress" : "keydown") + ".autocomplete", function(e) {
+      var something_selected = !!_this.$results.find('.selected').length;
       switch(e.keyCode) {
         case KEY.UP:
-          _this.select(_this.$results.find('.selected').prev());
+          if(something_selected) {
+            _this.select(_this.$results.find('.selected').prev());
+          } else {
+            _this.select(_this.$results.find('li:last'));
+          }
+          e.preventDefault();
           break;
         case KEY.DOWN:
-          _this.select(_this.$results.find('.selected').next());
+          if(something_selected) {
+            _this.select(_this.$results.find('.selected').next());
+          } else {
+            _this.select(_this.$results.find('li:first'));
+          }
+          e.preventDefault();
           break;
         default:
           break;
@@ -61,13 +72,19 @@ $.extend(InputDropdown.prototype, {
   },
   show_results: function(results) {
     var _this = this;
+
     var $results_ul = this.$results.children('ul');
+    $results_ul.empty();
 
-    $.each(results, function() {
-      $results_ul.append('<li>' + this + '</li>');
+    $.each(results, function(index) {
+      var name = this;
+      if(this != 'string') {
+        name = this[0];
+      }
+      var $li = $('<li>' + name + '</li>');
+      $li.data('livesearch_result', this);
+      $results_ul.append($li);
     });
-
-    this.select($results_ul.children(':first'));
 
     $results_ul.children('li').click(function() {
       _this.select($(this));
@@ -76,11 +93,17 @@ $.extend(InputDropdown.prototype, {
     this.$results.slideDown();
   },
   select: function($li) {
+    var _this = this;
     var $results_ul = this.$results.children('ul');
     $results_ul.children('li').removeClass('selected').css('font-weight', 'normal');
     $li.addClass('selected');
     $li.css('font-weight', 'bold');
-    this.$elem.val($li.text());
+
+    this.livesearch.suspend_while(function() {
+      _this.$elem.val($li.text());
+    });
+
+    this.$elem.trigger('livesearch:selected', [$li.data('livesearch_result')]);
   }
 });
 

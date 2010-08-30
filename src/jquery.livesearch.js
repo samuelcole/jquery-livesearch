@@ -17,10 +17,11 @@
 function LiveSearch($elem, options) {
 	this.$elem = $elem;
   this.$form = $elem.closest('form');
-  this.options = $.extend({ delay: 400 }, options);
+  this.options = $.extend({ delay: 1000, minimum_characters: 3 }, options);
   this.last_search = false;
   this.search_xhr;
   this.cache = {};
+  this.active = true;
   this._attach();
 }
 
@@ -28,14 +29,23 @@ $.extend(LiveSearch.prototype, {
   _attach: function() {
     var _this = this;
     this.$elem.bind("keypress cut paste input", function() {
+      if(!_this.active) return;
+
       clearTimeout(timeout);
       timeout = function() { _this.search_for_value(); };
       setTimeout(timeout, _this.options.delay);
     });
     this.$form.bind("submit", function(e) {
-      e.preventDefault();
+      if(!_this.active) return;
+
       clearTimeout(timeout);
       _this.search_for_value();
+    });
+    this.$elem.bind('livesearch:suspend', function() {
+      _this.active = false;
+    });
+    this.$elem.bind('livesearch:activate', function() {
+      _this.active = true;
     });
   },
 
@@ -43,10 +53,21 @@ $.extend(LiveSearch.prototype, {
     this.search(this.$elem.val());
   },
 
+  suspend_while: function(func) {
+    this.active = false;
+    func();
+    // TODO: this timeout is to to allow events to bubble before re-enabling, but I'm not sure
+    // why bubbling doesn't occur synchronously.
+    setTimeout(function() {
+      this.active = true;
+    }, 100);
+  },
+
   search: function(value) {
     var _this = this;
     
     if(value == this.last_search) return;
+    if(value.length < this.options.minimum_characters) return;
 
     if(this.search_xhr) this.search_xhr.abort();
     
