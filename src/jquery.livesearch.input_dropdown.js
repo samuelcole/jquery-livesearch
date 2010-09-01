@@ -31,10 +31,22 @@ $.fn.livesearch_input_dropdown = function(options) {
 function InputDropdown($elem, options) {
 	this.$elem = $elem;
   
-  this.options = $.extend({ update_input: true }, options);
+  this.options = $.extend({
+    update_input: true,
+    no_results_html: '<div class="no_results">Sorry, we couldn\'t find anything.</div>'
+  }, options);
 
-  this.$results = $('<div class="results" style="position: absolute; background-color: white"><ul></ul></div>');
-  this.$elem.after(this.$results);
+  if(this.$elem.siblings('.results').length) {
+    this.$results = this.$elem.siblings('.results');
+  } else {
+    this.$results = $('<div class="results"></div>');
+    this.$elem.after(this.$results);
+  }
+  this.$results.append('<ul></ul>');
+  this.$no_results = $(this.options.no_results_html);
+  this.$no_results.hide();
+  this.$results.append(this.$no_results);
+
   this.$results.width(this.$elem);
   this.$results.hide();
 
@@ -77,6 +89,14 @@ $.extend(InputDropdown.prototype, {
 
     var $results_ul = this.$results.children('ul');
     $results_ul.empty();
+
+    if(!results.length) {
+      this.$no_results.show();
+      $results_ul.hide();
+    } else {
+      this.$no_results.hide();
+      $results_ul.show();
+    }
 
     $.each(results, function(index) {
       var name = this;
