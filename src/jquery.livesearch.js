@@ -46,6 +46,9 @@ $.extend(LiveSearch.prototype, {
     this.$elem.bind('livesearch:activate', function() {
       _this.active = true;
     });
+    this.$elem.bind('livesearch:cancel', function() {
+      _this.search_xhr.abort();
+    });
   },
 
   search_for_value: function() {
@@ -73,10 +76,21 @@ $.extend(LiveSearch.prototype, {
     if(this.cache[value]) {
       this.$elem.trigger('livesearch:results', [this.cache[value]]);
     } else {
-      this.search_xhr = $.get(this.$form.attr('action'), this.$form.serialize(), function(data) {
-        _this.$elem.trigger('livesearch:results', [data]);
-        _this.cache[value] = data;
-      }, 'json');
+      _this.$elem.trigger('livesearch:searching');
+      this.search_xhr = $.ajax({
+        type: 'get',
+        url: this.$form.attr('action'),
+        dataType: 'json',
+        data: this.$form.serialize(),
+        global: false,
+        success: function(data) {
+            _this.$elem.trigger('livesearch:results', [data]);
+            _this.cache[value] = data;
+          },
+        error: function() {
+          _this.$elem.trigger('livesearch:ajax_error');
+        }
+        });
     }
 
     this.last_search = value;
