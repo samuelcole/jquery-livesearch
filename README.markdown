@@ -17,8 +17,8 @@ in any way you wish.
 
 Options
 -------
-delay: number of milliseconds to wait after a keystroke, before sending a request
-minimum_characters: don't send a request until the user has typed in this number of characters
+- delay: number of milliseconds to wait after a keystroke, before sending a request
+- minimum_characters: don't send a request until the user has typed in this number of characters
 
 Bonus features
 --------------
