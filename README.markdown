@@ -5,7 +5,7 @@ A small engine that returns results when you stop typing into an input field.
 
 jQuery-LiveSearch attaches to an input:
 
-  $('input.livesearch').livesearch();
+  $('input.livesearch').livesearch(options);
 
 Then when a user stops typing, it serializes the nearest parent form and submits it with ajax. When the results come
 back it fires a custom jquery event:
@@ -14,6 +14,19 @@ back it fires a custom jquery event:
 
 You can bind to that on the input, or any of it's parent elements (bubbling rules!), and then present it to your users
 in any way you wish.
+
+Options
+-------
+delay: number of milliseconds to wait after a keystroke, before sending a request
+minimum_characters: don't send a request until the user has typed in this number of characters
+
+Bonus features
+--------------
+
+- If the user starts typing before a request is complete, it cancels the original request and starts a new one.
+- If the user types in something they have already typed in before, it uses the last results it has obtained.
+- If the user hits enter before they have 'stopped typing' it sends the request immediately (but you have to block the
+  form from submitting yourself).
 
 Some possible uses
 ------------------
