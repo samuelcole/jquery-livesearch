@@ -101,3 +101,4 @@ $.fn.livesearch_navigator = function(options) {
   });
 };
 
+})(jQuery);
