@@ -47,7 +47,7 @@ $.extend(LiveSearch.prototype, {
       _this.active = true;
     });
     this.$elem.bind('livesearch:cancel', function() {
-      _this.search_xhr.abort();
+      if(_this.search_xhr) _this.search_xhr.abort();
     });
   },
 
