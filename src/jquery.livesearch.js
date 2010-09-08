@@ -48,6 +48,7 @@ $.extend(LiveSearch.prototype, {
     });
     this.$elem.bind('livesearch:cancel', function() {
       if(_this.search_xhr) _this.search_xhr.abort();
+      _this.last_search = false;
     });
   },
 
@@ -67,7 +68,7 @@ $.extend(LiveSearch.prototype, {
 
   search: function(value) {
     var _this = this;
-    
+
     if(value == this.last_search) return;
     if(value.length < this.options.minimum_characters) return;
 
@@ -83,7 +84,11 @@ $.extend(LiveSearch.prototype, {
         dataType: 'json',
         data: this.$form.serialize(),
         global: false,
-        success: function(data) {
+        success: function(data, textStatus, xhr) {
+            // this is the best workaround I can think of for
+            // http://dev.jquery.com/ticket/6173
+            if (data === null) return;
+
             _this.$elem.trigger('livesearch:results', [data]);
             _this.cache[value] = data;
           },
