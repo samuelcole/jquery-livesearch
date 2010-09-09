@@ -65,7 +65,9 @@ $.extend(InputDropdown.prototype, {
       switch(e.keyCode) {
         case KEY.UP:
           if(something_selected) {
-            _this.select(_this.$results.find('.selected').prev());
+            var $prev = _this.$results.find('.selected').prev();
+            if(!$prev.length) $prev = _this.$results.find('li:last');
+            _this.select($prev);
           } else {
             _this.select(_this.$results.find('li:last'));
           }
@@ -73,7 +75,9 @@ $.extend(InputDropdown.prototype, {
           break;
         case KEY.DOWN:
           if(something_selected) {
-            _this.select(_this.$results.find('.selected').next());
+            var $next = _this.$results.find('.selected').next();
+            if(!$next.length) $next = _this.$results.find('li:first');
+            _this.select($next);
           } else {
             _this.select(_this.$results.find('li:first'));
           }
