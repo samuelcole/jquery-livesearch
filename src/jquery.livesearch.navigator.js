@@ -42,7 +42,7 @@ $.fn.livesearch_navigator = function(options) {
     var $icon_search_clear = $form.find('.icon-search-clear');
     var $search_loading_icon = $text.siblings('.icon-search');
 
-    $text.livesearch_input_dropdown({update_input:false});
+    $text.livesearch_input_dropdown($.extend(options, {update_input:false}));
     var input_dropdown = $text.data('livesearch.input_dropdown');
 
     $text.bind('livesearch:selected', function(e, data) {

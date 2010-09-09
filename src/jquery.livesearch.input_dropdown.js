@@ -50,7 +50,7 @@ function InputDropdown($elem, options) {
   this.$results.width(this.$elem);
   this.$results.hide();
 
-  this.livesearch = $elem.livesearch().data('livesearch');
+  this.livesearch = $elem.livesearch(this.options).data('livesearch');
   this._attach();
 }
 

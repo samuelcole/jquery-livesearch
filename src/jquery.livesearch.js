@@ -80,7 +80,7 @@ $.extend(LiveSearch.prototype, {
       _this.$elem.trigger('livesearch:searching');
       this.search_xhr = $.ajax({
         type: 'get',
-        url: this.$form.attr('action'),
+        url: this.options.url || this.$form.attr('action'),
         dataType: 'json',
         data: this.$form.serialize(),
         global: false,
