@@ -17,7 +17,7 @@ $.fn.livesearch = function(options) {
 function LiveSearch($elem, options) {
 	this.$elem = $elem;
   this.$form = $elem.closest('form');
-  this.options = $.extend({ delay: 400, minimum_characters: 3 }, options);
+  this.options = $.extend({ delay: 400, minimum_characters: 3, serialize: this.$form }, options);
   this.last_search = false;
   this.search_xhr;
   this.cache = {};
@@ -61,8 +61,9 @@ $.extend(LiveSearch.prototype, {
     func();
     // TODO: this timeout is to to allow events to bubble before re-enabling, but I'm not sure
     // why bubbling doesn't occur synchronously.
+    var _this = this;
     setTimeout(function() {
-      this.active = true;
+      _this.active = true;
     }, 100);
   },
 
@@ -82,7 +83,7 @@ $.extend(LiveSearch.prototype, {
         type: 'get',
         url: this.options.url || this.$form.attr('action'),
         dataType: 'json',
-        data: this.$form.serialize(),
+        data: this.options.serialize.serialize(),
         global: false,
         success: function(data, textStatus, xhr) {
             // this is the best workaround I can think of for
@@ -95,7 +96,7 @@ $.extend(LiveSearch.prototype, {
         error: function() {
           _this.$elem.trigger('livesearch:ajax_error');
         }
-        });
+      });
     }
 
     this.last_search = value;

@@ -38,6 +38,7 @@ function InputDropdown($elem, options) {
 
   if(this.$elem.siblings('.results').length) {
     this.$results = this.$elem.siblings('.results');
+    this.$results.empty();
   } else {
     this.$results = $('<div class="results"></div>');
     this.$elem.after(this.$results);
@@ -47,7 +48,6 @@ function InputDropdown($elem, options) {
   this.$no_results.hide();
   this.$results.append(this.$no_results);
 
-  this.$results.width(this.$elem);
   this.$results.hide();
 
   this.livesearch = $elem.livesearch(this.options).data('livesearch');
