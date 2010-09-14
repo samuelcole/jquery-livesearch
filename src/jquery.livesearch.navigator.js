@@ -38,7 +38,6 @@ $.fn.livesearch_navigator = function(options) {
   return $(this).each(function() {
     var $form = $(this);
     var $text = $form.find('input');
-    var selected_path = false;
     var $icon_search_clear = $form.find('.icon-search-clear');
     var $search_loading_icon = $text.siblings('.icon-search');
 
@@ -46,11 +45,7 @@ $.fn.livesearch_navigator = function(options) {
     var input_dropdown = $text.data('livesearch.input_dropdown');
 
     $text.bind('livesearch:selected', function(e, data) {
-      if(data) {
-        selected_path = data[1];
-      } else {
-        selected_path = false;
-      }
+      if(data) window.location = data[1];
     });
 
     $text.bind('keypress cut paste input', function() {
@@ -86,17 +81,6 @@ $.fn.livesearch_navigator = function(options) {
         $text.trigger('livesearch:cancel');
         $text.siblings('.results').slideUp();
       }
-    });
-
-    $form.bind('submit', function(e) {
-      e.preventDefault();
-      if(!selected_path) return;
-      window.location = selected_path;
-    });
-
-    //this is a shoddy coincidence: the user probably clicked on an li, thus selecting it's state.
-    $form.find('.results').bind('click', function() {
-      window.location = selected_path;
     });
   });
 };

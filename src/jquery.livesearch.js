@@ -28,6 +28,9 @@ function LiveSearch($elem, options) {
 $.extend(LiveSearch.prototype, {
   _attach: function() {
     var _this = this;
+    
+    this.$elem.attr('autocomplete', 'off'); //we got this, yall
+
     this.$elem.bind("keypress cut paste input", function() {
       if(!_this.active) return;
 
@@ -79,6 +82,7 @@ $.extend(LiveSearch.prototype, {
       this.$elem.trigger('livesearch:results', [this.cache[value]]);
     } else {
       _this.$elem.trigger('livesearch:searching');
+      _this.$elem.addClass('searching');
       this.search_xhr = $.ajax({
         type: 'get',
         url: this.options.url || this.$form.attr('action'),
@@ -91,10 +95,12 @@ $.extend(LiveSearch.prototype, {
             if (data === null) return;
 
             _this.$elem.trigger('livesearch:results', [data]);
+            _this.$elem.removeClass('searching');
             _this.cache[value] = data;
           },
         error: function() {
           _this.$elem.trigger('livesearch:ajax_error');
+          _this.$elem.removeClass('searching');
         }
       });
     }

@@ -67,9 +67,9 @@ $.extend(InputDropdown.prototype, {
           if(something_selected) {
             var $prev = _this.$results.find('.selected').prev();
             if(!$prev.length) $prev = _this.$results.find('li:last');
-            _this.select($prev);
+            _this.select($prev, false);
           } else {
-            _this.select(_this.$results.find('li:last'));
+            _this.select(_this.$results.find('li:last'), false);
           }
           e.preventDefault();
           break;
@@ -77,11 +77,16 @@ $.extend(InputDropdown.prototype, {
           if(something_selected) {
             var $next = _this.$results.find('.selected').next();
             if(!$next.length) $next = _this.$results.find('li:first');
-            _this.select($next);
+            _this.select($next, false);
           } else {
-            _this.select(_this.$results.find('li:first'));
+            _this.select(_this.$results.find('li:first'), false);
           }
           e.preventDefault();
+          break;
+        case KEY.ENTER:
+            // we want to trigger the selected event
+            _this.select(_this.$results.find('.selected'), true);
+            e.preventDefault();
           break;
         default:
           break;
@@ -113,12 +118,15 @@ $.extend(InputDropdown.prototype, {
     });
 
     $results_ul.children('li').click(function() {
-      _this.select($(this));
+      _this.select($(this), true);
     });
 
     this.$results.slideDown();
   },
-  select: function($li) {
+  // There are two kinds of selects:
+  // - Hard selects, these are triggered by clicks or the enter key. They trigger the select event.
+  // - Soft selects, these are triggered by arrowing up or down. They do not trigger the select event.
+  select: function($li, trigger) {
     var _this = this;
     var $results_ul = this.$results.children('ul');
     $results_ul.children('li').removeClass('selected').css('font-weight', 'normal');
@@ -131,7 +139,7 @@ $.extend(InputDropdown.prototype, {
       });
     }
 
-    this.$elem.trigger('livesearch:selected', [$li.data('livesearch_result')]);
+    if(trigger) this.$elem.trigger('livesearch:selected', [$li.data('livesearch_result')]);
   }
 });
 
