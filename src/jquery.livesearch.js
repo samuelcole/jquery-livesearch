@@ -17,7 +17,12 @@ $.fn.livesearch = function(options) {
 function LiveSearch($elem, options) {
 	this.$elem = $elem;
   this.$form = $elem.closest('form');
-  this.options = $.extend({ delay: 400, minimum_characters: 3, serialize: this.$form }, options);
+  this.options = $.extend({
+    delay: 400,
+    minimum_characters: 3,
+    serialize: this.$form,
+    process_data: false
+  }, options);
   this.last_search = false;
   this.search_xhr;
   this.cache = {};
@@ -35,13 +40,9 @@ $.extend(LiveSearch.prototype, {
       if(!_this.active) return;
 
       clearTimeout(timeout);
-      timeout = setTimeout(function() {_this.search_for_value();}, _this.options.delay);
-    });
-    this.$form.bind("submit", function(e) {
-      if(!_this.active) return;
-
-      clearTimeout(timeout);
-      _this.search_for_value();
+      timeout = setTimeout(function() {
+        _this.search_for_value();
+      }, _this.options.delay);
     });
     this.$elem.bind('livesearch:suspend', function() {
       _this.active = false;
@@ -62,8 +63,8 @@ $.extend(LiveSearch.prototype, {
   suspend_while: function(func) {
     this.active = false;
     func();
-    // TODO: this timeout is to to allow events to bubble before re-enabling, but I'm not sure
-    // why bubbling doesn't occur synchronously.
+    // TODO: this timeout is to to allow events to bubble before re-enabling,
+    // but I'm not sure why bubbling doesn't occur synchronously.
     var _this = this;
     setTimeout(function() {
       _this.active = true;
@@ -81,13 +82,19 @@ $.extend(LiveSearch.prototype, {
     if(this.cache[value]) {
       this.$elem.trigger('livesearch:results', [this.cache[value]]);
     } else {
-      _this.$elem.trigger('livesearch:searching');
-      _this.$elem.addClass('searching');
+      this.$elem.trigger('livesearch:searching');
+      this.$elem.addClass('searching');
+
+      var data = this.options.serialize.serialize();
+      if(this.options.process_data) {
+        data = this.options.process_data.apply(this);
+      }
+
       this.search_xhr = $.ajax({
         type: 'get',
         url: this.options.url || this.$form.attr('action'),
         dataType: 'json',
-        data: this.options.serialize.serialize(),
+        data: data,
         global: false,
         success: function(data, textStatus, xhr) {
             // this is the best workaround I can think of for
