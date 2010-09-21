@@ -33,22 +33,23 @@ function InputDropdown($elem, options) {
   
   this.options = $.extend({
     update_input: true,
-    no_results_html: '<div class="no_results">Sorry, we couldn\'t find anything.</div>'
+    no_results_html: 'Sorry, we couldn\'t find anything.'
   }, options);
 
   if(this.$elem.siblings('.results').length) {
     this.$results = this.$elem.siblings('.results');
-    this.$results.empty();
+    this.$results.find('ul.result_list, div.no_results').remove();
   } else {
     this.$results = $('<div class="results"></div>');
     this.$elem.after(this.$results);
   }
-  this.$results.append('<ul></ul>');
-  this.$no_results = $(this.options.no_results_html);
+  this.$results.append('<ul class="result_list"></ul>');
+  this.$no_results = $('<div class="no_results">' + this.options.no_results_html + '</div>');
   this.$no_results.hide();
   this.$results.append(this.$no_results);
 
   this.$results.hide();
+  this.$results.width(this.$elem.outerWidth());
 
   this.livesearch = $elem.livesearch(this.options).data('livesearch');
   this._attach();
