@@ -125,8 +125,10 @@ $.extend(InputDropdown.prototype, {
     this.$results.slideDown();
   },
   // There are two kinds of selects:
-  // - Hard selects, these are triggered by clicks or the enter key. They trigger the select event.
-  // - Soft selects, these are triggered by arrowing up or down. They do not trigger the select event.
+  // - Hard selects, these are triggered by clicks or the enter key. They trigger
+  //   the select event.
+  // - Soft selects, these are triggered by arrowing up or down. They do not
+  //   trigger the select event.
   select: function($li, trigger) {
     var _this = this;
     var $results_ul = this.$results.children('ul');
