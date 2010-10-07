@@ -6,12 +6,14 @@ $.fn.livesearch_selector = function(options) {
     var $div = $(this);
     var $input = $div.find('input[type="text"]');
     var $hidden_input = options.target_input || $div.find('input[type="hidden"]');
+    var $search_loading_icon = $input.siblings('.icon-search');
     
     $div.addClass('search');
 
     function select() {
       $input.hide();
       $input.attr('disabled', 'disabled');
+      $input.siblings('.icon-search-clear, .icon-search').hide();
       var $value_div = $('<div><span class="value">' + $input.val() + '</span><a class="cancel-link" href="#">' + options.cancel_copy + '</a></div>');
       $input.after($value_div);
       $input.siblings('.results').slideUp();
@@ -22,6 +24,7 @@ $.fn.livesearch_selector = function(options) {
         $input.val('');
         $value_div.remove();
         $input.removeAttr('disabled');
+        $input.siblings('.icon-search-clear, .icon-search').show();
         $input.show();
         $input.focus();
         $hidden_input.val('');
@@ -36,9 +39,23 @@ $.fn.livesearch_selector = function(options) {
 
     options.url = options.url || $div.closest('form').attr('action');
     $input.livesearch_input_dropdown(options);
+    
+    $input.bind('livesearch:searching', function() {
+      $search_loading_icon.removeClass('icon-search').addClass('icon-loading-small');
+    });
+    
+    $input.bind('livesearch:results livesearch:ajax_error', function() {
+      $search_loading_icon.removeClass('icon-loading-small').addClass('icon-search');
+    });
+    
+    $input.bind('livesearch:results', function() {
+      var $results = $input.siblings('.results');
+      input_dropdown.select($results.find('li:first'));
+    });
 
     $input.bind('livesearch:selected', function(e, data) {
-      if (data) $hidden_input.val(data[1]);
+      if (!data) return;
+      $hidden_input.val(data[1]);
       select();
     });
   });
