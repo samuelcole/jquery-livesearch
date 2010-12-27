@@ -21,11 +21,16 @@ function LiveSearch($elem, options) {
     delay: 400,
     minimum_characters: 3,
     serialize: this.$form,
+    client_side_cache: true,
     process_data: false
   }, options);
   this.last_search = false;
   this.search_xhr;
-  this.cache = {};
+  if(this.options.client_side_cache) {
+    this.cache = {};
+  } else {
+    this.cache = false;
+  }
   this.active = true;
   this._attach();
 }
@@ -79,7 +84,7 @@ $.extend(LiveSearch.prototype, {
 
     if(this.search_xhr) this.search_xhr.abort();
     
-    if(this.cache[value]) {
+    if(this.cache && this.cache[value]) {
       this.$elem.trigger('livesearch:results', [this.cache[value]]);
     } else {
       this.$elem.trigger('livesearch:searching');
@@ -103,7 +108,9 @@ $.extend(LiveSearch.prototype, {
 
             _this.$elem.trigger('livesearch:results', [data]);
             _this.$elem.removeClass('searching');
-            _this.cache[value] = data;
+            if(_this.cache) {
+              _this.cache[value] = data;
+            }
           },
         error: function() {
           _this.$elem.trigger('livesearch:ajax_error');
