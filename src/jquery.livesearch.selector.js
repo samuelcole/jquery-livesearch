@@ -38,7 +38,7 @@ $.fn.livesearch_selector = function(options) {
     }
 
     options.url = options.url || $div.closest('form').attr('action');
-    $input.livesearch_input_dropdown(options);
+    var input_dropdown = $input.livesearch_input_dropdown(options);
     
     $input.bind('livesearch:searching', function() {
       $search_loading_icon.removeClass('icon-search').addClass('icon-loading-small');
@@ -53,7 +53,7 @@ $.fn.livesearch_selector = function(options) {
       input_dropdown.select($results.find('li:first'));
     });
 
-    $input.bind('livesearch:selected', function(e, data) {
+    $div.bind('livesearch:selected', function(e, data) {
       if (!data) return;
       $hidden_input.val(data[1]);
       select();

@@ -44,7 +44,7 @@ $.fn.livesearch_navigator = function(options) {
     $text.livesearch_input_dropdown($.extend(options, {update_input:false}));
     var input_dropdown = $text.data('livesearch.input_dropdown');
 
-    $text.bind('livesearch:selected', function(e, data) {
+    $form.bind('livesearch:selected', function(e, data) {
       if(data) window.location = data[1];
     });
 
