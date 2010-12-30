@@ -70,18 +70,23 @@ $.fn.livesearch_navigator = function(options) {
       input_dropdown.select($results.find('li:first'));
     });
     
-    $icon_search_clear.bind('click', function() {
+    function close_results() {
       $text.val('');
-      $text.blur();
+      $text.trigger('livesearch:cancel');
+      $text.siblings('.results').slideUp();
+    }
+    
+    $icon_search_clear.bind('click', function() {
+      $text.focus();
+      close_results();
     });
 
     $text.bind('blur', function() {
       if($text.val().length < 3) {
-        $text.val('');
-        $text.trigger('livesearch:cancel');
-        $text.siblings('.results').slideUp();
+        close_results();
       }
     });
+    
   });
 };
 
