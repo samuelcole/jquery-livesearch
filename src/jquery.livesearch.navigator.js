@@ -1,4 +1,4 @@
-(function($) {
+(function ($) {
 
 /*
  * Behavior:
@@ -33,61 +33,64 @@
  *
  */
 
-$.fn.livesearch_navigator = function(options) {
-  options = options || {};
-  return $(this).each(function() {
-    var $form = $(this);
-    var $text = $form.find('input');
-    var $icon_search_clear = $form.find('.icon-search-clear');
-    var $search_loading_icon = $text.siblings('.icon-search');
+  $.fn.livesearch_navigator = function (options) {
+    options = options || {};
+    return $(this).each(function () {
+      var $form = $(this),
+        $text = $form.find('input'),
+        $icon_search_clear = $form.find('.icon-search-clear'),
+        $search_loading_icon = $text.siblings('.icon-search'),
+        input_dropdown;
 
-    $text.livesearch_input_dropdown($.extend(options, {update_input:false}));
-    var input_dropdown = $text.data('livesearch.input_dropdown');
+      $text.livesearch_input_dropdown($.extend(options, {update_input : false}));
+      input_dropdown = $text.data('livesearch.input_dropdown');
 
-    $form.bind('livesearch:selected', function(e, data) {
-      if(data) window.location = data[1];
-    });
+      $form.bind('livesearch:selected', function (e, data) {
+        if (data) {
+          window.location = data[1];
+        }
+      });
 
-    $text.bind('keypress cut paste input', function() {
-      var $this = $(this);
-      if(this.value) {
-        $icon_search_clear.show();
-      } else {  
-        $icon_search_clear.hide();
+      $text.bind('keypress cut paste input', function () {
+        var $this = $(this);
+        if (this.value) {
+          $icon_search_clear.show();
+        } else {  
+          $icon_search_clear.hide();
+        }
+      });
+
+      $text.bind('livesearch:searching', function () {
+        $search_loading_icon.removeClass('icon-search').addClass('icon-loading-small');
+      });
+      
+      $text.bind('livesearch:results livesearch:ajax_error', function () {
+        $search_loading_icon.removeClass('icon-loading-small').addClass('icon-search');
+      });
+
+      $text.bind('livesearch:results', function () {
+        var $results = $text.siblings('.results');
+        input_dropdown.select($results.find('li:first'));
+      });
+      
+      function close_results() {
+        $text.val('');
+        $text.trigger('livesearch:cancel');
+        $text.siblings('.results').slideUp();
       }
-    });
-
-    $text.bind('livesearch:searching', function() {
-      $search_loading_icon.removeClass('icon-search').addClass('icon-loading-small');
-    });
-    
-    $text.bind('livesearch:results livesearch:ajax_error', function() {
-      $search_loading_icon.removeClass('icon-loading-small').addClass('icon-search');
-    });
-
-    $text.bind('livesearch:results', function() {
-      var $results = $text.siblings('.results');
-      input_dropdown.select($results.find('li:first'));
-    });
-    
-    function close_results() {
-      $text.val('');
-      $text.trigger('livesearch:cancel');
-      $text.siblings('.results').slideUp();
-    }
-    
-    $icon_search_clear.bind('click', function() {
-      $text.focus();
-      close_results();
-    });
-
-    $text.bind('blur', function() {
-      if($text.val().length < 3) {
+      
+      $icon_search_clear.bind('click', function () {
+        $text.focus();
         close_results();
-      }
-    });
-    
-  });
-};
+      });
 
-})(jQuery);
+      $text.bind('blur', function () {
+        if ($text.val().length < 3) {
+          close_results();
+        }
+      });
+      
+    });
+  };
+
+}(jQuery));
