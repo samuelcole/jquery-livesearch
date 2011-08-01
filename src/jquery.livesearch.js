@@ -47,8 +47,11 @@
 
         clearTimeout(timeout);
         timeout = setTimeout(function () {
-          _this.search_for_value();
+          _this.search();
         }, _this.options.delay);
+      });
+      this.options.serialize.bind('change', function () {
+        _this.search();
       });
       this.$elem.bind('livesearch:suspend', function () {
         _this.active = false;
@@ -64,10 +67,6 @@
       });
     },
 
-    search_for_value: function () {
-      this.search(this.$elem.val());
-    },
-
     suspend_while: function (func) {
       this.active = false;
       func();
@@ -79,33 +78,35 @@
       }, 100);
     },
 
-    search: function (value) {
+    search: function () {
       var _this = this,
-        data;
+        form_data = this.options.serialize.serialize();
 
-      if (value === this.last_search) { return; }
-      if (value.length < this.options.minimum_characters) { return; }
+      if (this.options.process_data) {
+        form_data = this.options.process_data.apply(this, [form_data]);
+        if (typeof form_data === 'object') {
+          form_data = $.param(form_data);
+        }
+      }
+
+      if (form_data === this.last_search) { return; }
+      if (this.$elem.val().length < this.options.minimum_characters) { return; }
 
       if (this.search_xhr) {
         this.search_xhr.abort();
       }
       
-      if (this.cache && this.cache[value] && typeof (this.cache[value]) !== 'function') {
-        this.$elem.trigger('livesearch:results', [this.cache[value]]);
+      if (this.cache && this.cache[form_data] && typeof (this.cache[form_data]) !== 'function') {
+        this.$elem.trigger('livesearch:results', [this.cache[form_data]]);
       } else {
         this.$elem.trigger('livesearch:searching');
         this.$elem.addClass('searching');
-
-        data = this.options.serialize.serialize();
-        if (this.options.process_data) {
-          data = this.options.process_data.apply(this);
-        }
 
         this.search_xhr = $.ajax({
           type: 'get',
           url: this.options.url || this.$form.attr('action'),
           dataType: 'json',
-          data: data,
+          data: form_data,
           global: false,
           success: function (data, textStatus, xhr) {
             // this is the best workaround I can think of for
@@ -115,7 +116,7 @@
             _this.$elem.trigger('livesearch:results', [data]);
             _this.$elem.removeClass('searching');
             if (_this.cache) {
-              _this.cache[value] = data;
+              _this.cache[form_data] = data;
             }
           },
           error: function () {
@@ -125,7 +126,7 @@
         });
       }
 
-      this.last_search = value;
+      this.last_search = form_data;
     }
 
   });
