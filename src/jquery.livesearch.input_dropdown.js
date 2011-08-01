@@ -186,7 +186,10 @@
 
       this.bind_results();
 
-      this.$results.slideDown();
+      this.$results.slideDown(function () {
+        $(window).resize();
+        _this.$results.trigger('sticky_bar:fix_to_bottom');
+      });
     },
 
     unselect_currently_selected: function () {
@@ -229,3 +232,4 @@
   });
 
 }(jQuery));
+
