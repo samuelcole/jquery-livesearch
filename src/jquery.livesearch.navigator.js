@@ -76,7 +76,10 @@
       function close_results() {
         $text.val('');
         $text.trigger('livesearch:cancel');
-        $text.siblings('.results').slideUp();
+        $text.siblings('.results').slideUp(function () {
+          $(window).resize();
+          $(this).trigger('sticky_bar:fix_to_bottom');
+        });
       }
       
       $icon_search_clear.bind('click', function () {
