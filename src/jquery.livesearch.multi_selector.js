@@ -73,10 +73,6 @@
         $search_loading_icon.removeClass('icon-loading-small').addClass('icon-search');
       });
 
-      $input.bind('blur', function () {
-        setTimeout(function () { reset(); }, 100); //let selected run, if need be
-      });
-      
       $div.bind('livesearch:selected', function (e, data) {
         if (!data) { return; }
         var this_name = name.replace('[template]', '[' + $list.children('li').length + ']'),
