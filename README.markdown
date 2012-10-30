@@ -48,3 +48,4 @@ Authors
 _______
 Samuel Cole <sam@samuelcole.name>
 Lance Ivy (jquery.livesearch.multi_selector.js) <lance@cainlevy.net>
+Alex Cox <alegscogs@gmail.com>
