@@ -15,10 +15,11 @@
         $input.hide();
         $input.attr('disabled', 'disabled');
         $input.siblings('.icon-search-clear, .icon-search').hide();
-        var $value_div = $('<div><span class="value">' + $input.val() + '</span><a class="cancel-link" href="#">' + options.cancel_copy + '</a></div>');
+        var $value_div = $('<div class="field-selected"><span class="value">' + $input.val() + '</span><a class="cancel-link" href="#">' + options.cancel_copy + '</a></div>');
+        $input.siblings('div.field-selected').remove();
         $input.after($value_div);
         $input.siblings('.results').slideUp();
-        $input.trigger('livesearch_selector:select');
+        $input.trigger('livesearch_selector:select', [ $input.val() ]);
 
         $value_div.find('a.cancel-link').click(function (e) {
           e.preventDefault();
@@ -29,6 +30,7 @@
           $input.show();
           $input.focus();
           $hidden_input.val('');
+          $input.trigger('dirty');
           $input.trigger('livesearch_selector:unselect');
         });
       }
