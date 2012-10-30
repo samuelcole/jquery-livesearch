@@ -21,7 +21,8 @@
     this.options = $.extend({
       update_input: true,
       no_results_html: 'Sorry, we couldn\'t find anything.',
-      ignore_history: true;
+      ignore_history: true,
+      process_results: function (r) { return r; }
     }, options);
 
     var $field_with_icon = this.$elem.closest('.field_with_icon'),
@@ -76,6 +77,9 @@
       var _this = this;
 
       this.$elem.bind('livesearch:results', function (e, results) {
+        if (_this.options.process_results) {
+          results = _this.options.process_results(results);
+        }
         _this.show_results(results);
         _this.push_history(results);
       });
