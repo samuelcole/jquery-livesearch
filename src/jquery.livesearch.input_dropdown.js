@@ -212,9 +212,17 @@
     },
 
     show_results: function (results) {
-      var _this = this,
-        $results_ul = this.$results.children('ul'),
-        result_names;
+      var $results_ul = this.$results.children('ul'),
+        $full_search_link = $([]),
+        result_names,
+        text,
+        arrow_icon,
+        meta;
+
+      if (results.results) {
+        meta = results;
+        results = results.results;
+      }
 
       this.unselect_currently_selected();
       $results_ul.empty();
@@ -235,6 +243,17 @@
         $li.data('livesearch_result', results[index]);
         $results_ul.append($li);
       });
+
+      if (meta && meta.count > results.length) {
+        text = 'see all ' + meta.count + ' results';
+        arrow_icon = '<span class="icon-arrow"></span>&nbsp;';
+        $full_search_link = $('<a>').attr({
+          'href': this.livesearch.url + '?' + this.livesearch.last_search,
+          'title': text,
+          'class': 'see_all not_result'
+        }).html(arrow_icon + text).wrap('<li>');
+        $results_ul.append($full_search_link);
+      }
 
       this.bind_results();
 
