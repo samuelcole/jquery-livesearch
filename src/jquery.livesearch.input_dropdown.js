@@ -291,6 +291,14 @@
       });
     },
 
+    reset: function (clear) {
+      this.$results.hide();
+      this.$elem.val('');
+      if (clear) {
+        this.$results.children('ul.result_list').html('');
+      }
+    },
+
     unselect_currently_selected: function () {
       var $results_ul = this.$results.children('ul'),
         $last_selected = $results_ul.children('li.selected');
