@@ -54,6 +54,8 @@
     this.$no_results.hide();
     this.$results.append(this.$no_results);
 
+    this.handle_optional_content();
+
     // css should do this
     //this.$results.hide();
     //this.$results.width(this.$elem.outerWidth());
@@ -294,6 +296,12 @@
       $li.trigger('livesearch:soft_select');
       if (trigger) {
         $li.trigger('livesearch:selected', [$li.data('livesearch_result')]);
+      }
+    },
+
+    handle_optional_content: function () {
+      if (this.options.prepend) {
+        this.$results.prepend(this.options.prepend);
       }
     }
   });
