@@ -13,6 +13,11 @@
       client_side_cache: true,
       process_data: false
     }, options);
+    if (this.options.file_extension) {
+      this.ajax_url = this.ensure_file_extension(this.options.file_extension);
+    } else {
+      this.ajax_url = this.url;
+    }
     this.last_search = false;
     this.search_xhr = false;
     if (this.options.client_side_cache) {
@@ -65,6 +70,14 @@
         }
         _this.last_search = false;
       });
+    },
+
+    ensure_file_extension: function (extension) {
+      var
+        host_regexp_string = window.location.host.replace(/[^\w\d]/g, function (m) { return '\\' + m; }),
+        file_extension_regexp = new RegExp("((?:" + host_regexp_string + ")?[^\\.$#\\?]+)(\\.\\w*|)($|#|\\?)");
+
+      return this.url.replace(file_extension_regexp, function (m, _1, _2, _3) { return _1 + '.' + extension + _3; });
     },
 
     suspend_while: function (func) {
