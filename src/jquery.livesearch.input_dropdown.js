@@ -90,7 +90,8 @@
       this.$elem.bind(($.browser.opera ? "keypress" : "keydown") + ".autocomplete", function (e) {
         var something_selected = !!_this.$results.find('.selected').length,
           $prev,
-          $next;
+          $next,
+          $selected;
         switch (e.keyCode) {
 
         case KEY.UP:
@@ -119,7 +120,13 @@
           break;
         case KEY.ENTER:
           // we want to trigger the selected event
-          _this.select(_this.$results.find('.selected'), true);
+          $selected = _this.$results.find('.selected');
+
+          if (!$selected.length && _this.input_can_submit()) {
+            return;
+          }
+
+          _this.select($selected, true);
           e.preventDefault();
           break;
         default:
@@ -152,6 +159,14 @@
         }
       };
     },
+
+    input_can_submit: function () {
+      var
+        readyState = this.livesearch.search_xhr.readyState,
+        search_in_progress = (readyState > 0 && readyState < 4);
+      return this.options.input_can_submit_on_enter && !search_in_progress && this.$elem.is(":focus");
+    },
+
     bind_results: function () {
       var _this = this;
 
