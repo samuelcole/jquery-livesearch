@@ -316,8 +316,7 @@
     // - Soft selects, these are triggered by arrowing up or down. They do not
     //   trigger the select event.
     select: function ($li, trigger) {
-      var _this = this,
-        $results_ul = this.$results.children('ul');
+      var _this = this;
 
       if ($li.is('.not_result')) { return; }
 
@@ -345,4 +344,3 @@
   });
 
 }(jQuery));
-
