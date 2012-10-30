@@ -20,7 +20,8 @@
     this.$elem = $elem;
     this.options = $.extend({
       update_input: true,
-      no_results_html: 'Sorry, we couldn\'t find anything.'
+      no_results_html: 'Sorry, we couldn\'t find anything.',
+      ignore_history: true;
     }, options);
 
     var $field_with_icon = this.$elem.closest('.field_with_icon'),
@@ -76,9 +77,11 @@
 
       this.$elem.bind('livesearch:results', function (e, results) {
         _this.show_results(results);
+        _this.push_history(results);
       });
 
       this.bind_results();
+      this.bind_popstate();
 
       this.$elem.bind(($.browser.opera ? "keypress" : "keydown") + ".autocomplete", function (e) {
         var something_selected = !!_this.$results.find('.selected').length,
@@ -122,6 +125,29 @@
       });
     },
 
+    history_api_supported: function () {
+      return window.history && window.history.pushState;
+    },
+
+    bind_popstate: function () {
+      if (!this.history_api_supported() || this.options.ignore_history) { return; }
+      var _this = this;
+      this.replacing_history_state = false;
+      window.onpopstate = function (e) {
+        if (e.state && e.state.livesearch) {
+          // We've got a search object in history, so let's restore the input to that state.
+          _this.show_results(e.state.livesearch.results);
+          _this.livesearch.suspend_while(function () {
+            _this.$elem.val(e.state.livesearch.input_value).trigger('input');
+          });
+        } else {
+          // We're at a new or null history state.  We may have got
+          // here via the back button from an executed search, or have landed here via http search.
+          // Let's ensure a blank input.
+          _this.reset(true);
+        }
+      };
+    },
     bind_results: function () {
       var _this = this;
 
@@ -187,6 +213,27 @@
 
       this.bind_results();
 
+    push_history: function (results) {
+      if (!this.history_api_supported() || this.options.ignore_history) { return; }
+
+      if (typeof results === 'string') {
+        results = JSON.parse(results);
+      }
+
+      var state = {
+        livesearch : {
+          input_value : this.$elem.val(),
+          results : results
+        }
+      };
+
+      if (this.replacing_history_state) {
+        window.history.replaceState(state);
+        this.replacing_history_state = false;
+      } else {
+        window.history.pushState(state, "", '?' + this.livesearch.last_search);
+      }
+    },
       this.$results.slideDown(function () {
         $(window).resize();
         _this.$results.trigger('sticky_bar:fix_to_bottom');
