@@ -9,9 +9,10 @@
  * to.
  *
  * Requirements:
- * 
+ *
  * jquery.livesearch
  * jquery.livesearch.input_dropdown
+ * jquery.livesearch.pretty_input_dropdown
  *
  * Expected markup:
  *

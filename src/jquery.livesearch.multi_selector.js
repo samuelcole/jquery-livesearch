@@ -26,7 +26,7 @@
         $list.sortable({
           containment: 'document',
           axis: 'y',
-          update: function (e) {
+          update: function () {
             $list.find('input.position').each(function (i) {
               $(this).val(i);
             });
@@ -38,7 +38,7 @@
         var $cancel = $('<a class="cancel-link" href="#">' + options.cancel_copy + '</a>'),
           $destroy = $li.find('.destroy');
         $li.append($cancel);
-        if ($destroy.val()) {
+        if ($destroy.val() && $destroy.val() !== 'false') {
           $li.hide();
         }
         $cancel.click(function (e) {

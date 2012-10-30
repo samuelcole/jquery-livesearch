@@ -1,6 +1,6 @@
 (function ($) {
-    
-  /* KEY constant copied from jquery autocomplete: 
+
+  /* KEY constant copied from jquery autocomplete:
    * http://bassistance.de/jquery-plugins/jquery-plugin-autocomplete/
   */
   var KEY = {
@@ -15,16 +15,15 @@
     PAGEDOWN: 34,
     BACKSPACE: 8
   };
-  
+
   function InputDropdown($elem, options) {
     this.$elem = $elem;
-    
     this.options = $.extend({
       update_input: true,
       no_results_html: 'Sorry, we couldn\'t find anything.'
     }, options);
-    
-    var $field_with_icon = this.$elem.closest('.field_with_icon'), 
+
+    var $field_with_icon = this.$elem.closest('.field_with_icon'),
       $existing_results = $([]);
 
     if ($field_with_icon.length) {
@@ -44,9 +43,11 @@
         this.$elem.after(this.$results);
       }
     }
+
     if (!this.$results.find('ul.result_list').length) {
       this.$results.append('<ul class="result_list"></ul>');
     }
+
     this.$no_results = $('<div class="no_results">' + this.options.no_results_html + '</div>');
     this.$no_results.hide();
     this.$results.append(this.$no_results);
@@ -54,11 +55,10 @@
     // css should do this
     //this.$results.hide();
     //this.$results.width(this.$elem.outerWidth());
-
     this.livesearch = $elem.livesearch(this.options).data('livesearch');
     this._attach();
   }
-   
+
   $.fn.livesearch_input_dropdown = function (options) {
     options = options || {};
     return $(this).each(function () {
@@ -73,6 +73,7 @@
   $.extend(InputDropdown.prototype, {
     _attach: function () {
       var _this = this;
+
       this.$elem.bind('livesearch:results', function (e, results) {
         _this.show_results(results);
       });

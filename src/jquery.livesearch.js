@@ -82,6 +82,7 @@
       var _this = this,
         form_data = this.options.serialize.serialize();
 
+
       if (this.options.process_data) {
         form_data = this.options.process_data.apply(this, [form_data]);
         if (typeof form_data === 'object') {
@@ -95,7 +96,7 @@
       if (this.search_xhr) {
         this.search_xhr.abort();
       }
-      
+
       if (this.cache && this.cache[form_data] && typeof (this.cache[form_data]) !== 'function') {
         this.$elem.trigger('livesearch:results', [this.cache[form_data]]);
       } else {
