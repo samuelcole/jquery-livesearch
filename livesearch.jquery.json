@@ -1,7 +1,7 @@
 {
   "name": "livesearch",
   "title": "jQuery LiveSearch",
-  "description": "Basic tools for an autocomplete or filtering selections with on a form over AJAX.",
+  "description": "Basic tools for an autocomplete or filtering selections with a form over AJAX.",
   "keywords": [
     "livesearch"
   ],
