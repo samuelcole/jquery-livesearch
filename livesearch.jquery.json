@@ -1,0 +1,29 @@
+{
+  "name": "livesearch",
+  "title": "jQuery LiveSearch",
+  "description": "Basic tools for an autocomplete or filtering selections with on a form over AJAX.",
+  "keywords": [
+    "livesearch"
+  ],
+  "version": "0.1.0",
+  "author": {
+    "name": "Samuel Cole",
+    "url": "http://samuelcole.name"
+  },
+  "maintainers": [
+    {
+      "name": "Samuel Cole",
+      "email": "sam@samuelcole.name",
+      "url": "http://samuelcole.name"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/jquery/jquery-color/blob/2.1.2/MIT-LICENSE.txt"
+    }
+  ],
+  "dependencies": {
+    "jquery": ">=1.8"
+  }
+}
