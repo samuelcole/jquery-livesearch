@@ -46,6 +46,7 @@ selected value. This is a very basic style for livesearch, and should get you st
 
 Authors
 _______
-Samuel Cole <sam@samuelcole.name>
-Lance Ivy (jquery.livesearch.multi_selector.js) <lance@cainlevy.net>
-Alex Cox <alegscogs@gmail.com>
+
+* Samuel Cole <sam@samuelcole.name>
+* Lance Ivy (jquery.livesearch.multi_selector.js) <lance@cainlevy.net>
+* Alex Cox <alegscogs@gmail.com>
