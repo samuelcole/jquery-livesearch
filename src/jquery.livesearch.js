@@ -11,7 +11,8 @@
       minimum_characters: 3,
       serialize: this.$form,
       client_side_cache: true,
-      process_data: false
+      process_data: false,
+      dataType: 'json'
     }, options);
     if (this.options.file_extension) {
       this.ajax_url = this.ensure_file_extension(this.options.file_extension);
@@ -119,7 +120,7 @@
         this.search_xhr = $.ajax({
           type: 'get',
           url: this.options.url || this.$form.attr('action'),
-          dataType: 'json',
+          dataType: this.options.dataType,
           data: form_data,
           global: false,
           success: function (data, textStatus, xhr) {
