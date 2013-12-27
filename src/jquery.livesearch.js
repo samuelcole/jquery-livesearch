@@ -133,7 +133,7 @@
           dataType: this.options.dataType,
           data: form_data,
           global: false,
-          success: function (data, textStatus, xhr) {
+          success: function (data) {
             // this is the best workaround I can think of for
             // http://dev.jquery.com/ticket/6173
             if (data === null) { return; }
