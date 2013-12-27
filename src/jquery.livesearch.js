@@ -14,11 +14,14 @@
       process_data: false,
       dataType: 'json'
     }, options);
+    this.url = this.options.url || this.$form.attr('action');
+
     if (this.options.file_extension) {
       this.ajax_url = this.ensure_file_extension(this.options.file_extension);
     } else {
       this.ajax_url = this.url;
     }
+
     this.last_search = false;
     this.search_xhr = false;
     if (this.options.client_side_cache) {
@@ -119,7 +122,7 @@
 
         this.search_xhr = $.ajax({
           type: 'get',
-          url: this.options.url || this.$form.attr('action'),
+          url: this.ajax_url,
           dataType: this.options.dataType,
           data: form_data,
           global: false,
