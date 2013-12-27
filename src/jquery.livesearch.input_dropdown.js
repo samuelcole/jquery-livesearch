@@ -216,7 +216,6 @@
         $full_search_link = $([]),
         result_names,
         text,
-        arrow_icon,
         meta;
 
       if (results.results) {
@@ -246,12 +245,11 @@
 
       if (meta && meta.count > results.length) {
         text = 'see all ' + meta.count + ' results';
-        arrow_icon = '<span class="icon-arrow"></span>&nbsp;';
         $full_search_link = $('<a>').attr({
           'href': this.livesearch.url + '?' + this.livesearch.last_search,
           'title': text,
           'class': 'see_all not_result'
-        }).html(arrow_icon + text).wrap('<li>');
+        }).html(text).wrap('<li>');
         $results_ul.append($full_search_link);
       }
 
