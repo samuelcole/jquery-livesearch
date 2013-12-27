@@ -273,7 +273,7 @@
       };
 
       if (this.replacing_history_state) {
-        window.history.replaceState(state);
+        history.replaceState(state);
         this.replacing_history_state = false;
       } else {
         history.pushState(state, '', '?' + this.livesearch.last_search);
