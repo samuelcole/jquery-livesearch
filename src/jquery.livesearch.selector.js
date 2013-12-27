@@ -41,7 +41,8 @@
       }
 
       options.url = options.url || $div.closest('form').attr('action');
-      input_dropdown = $input.livesearch_input_dropdown(options);
+      $div.livesearch_pretty_input_dropdown(options);
+      input_dropdown = $input.data('livesearch.input_dropdown');
 
       $input.on('livesearch:searching', function () {
         $search_loading_icon.removeClass('ss-search').addClass('icon-loading-small');
@@ -60,6 +61,7 @@
         if (!data) {
           return;
         }
+        $input.val(data[0]);
         $hidden_input.val(data[1]);
         select();
       });
