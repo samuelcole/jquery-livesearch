@@ -18,8 +18,8 @@
  *
  * <form>
  *   <div>
- *     <span class='icon-search'></span>
- *     <span class='icon-search-clear'></span>
+ *     <span class='ss-icon ss-search'></span>
+ *     <span class='ss-icon ss-delete'></span>
  *     <input></input>
  *     <div class='results'></div>
  *   </div>

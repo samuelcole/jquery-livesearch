@@ -17,8 +17,8 @@
  *
  * <form>
  *   <div>
- *     <span class='icon-search'></span>
- *     <span class='icon-search-clear'></span>
+ *     <span class='ss-icon ss-search'></span>
+ *     <span class='ss-icon ss-delete'></span>
  *     <input></input>
  *     <div class='results'></div>
  *   </div>
@@ -38,8 +38,8 @@
     return $(this).each(function () {
       var $form = $(this),
         $text = $form.find('input[type=text]'),
-        $icon_search_clear = $form.find('.icon-search-clear'),
-        $search_loading_icon = $text.siblings('.icon-search'),
+        $icon_search_clear = $form.find('.ss-delete'),
+        $search_loading_icon = $text.siblings('.ss-search'),
         input_dropdown;
 
       $text.livesearch_input_dropdown($.extend(options, {update_input : false}));
@@ -58,11 +58,11 @@
       $text.on('keypress cut paste input livesearch:close_results blur', handle_close_button);
 
       $text.on('livesearch:searching', function () {
-        $search_loading_icon.removeClass('icon-search').addClass('icon-loading-small');
+        $search_loading_icon.removeClass('ss-search').addClass('icon-loading-small');
       });
 
       $text.on('livesearch:results livesearch:ajax_error', function () {
-        $search_loading_icon.removeClass('icon-loading-small').addClass('icon-search');
+        $search_loading_icon.removeClass('icon-loading-small').addClass('ss-search');
       });
 
       $text.on('livesearch:results', function () {

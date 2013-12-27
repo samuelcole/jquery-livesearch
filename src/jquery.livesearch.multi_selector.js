@@ -7,14 +7,14 @@
       sortable: false,
       update_input: false
     }, options);
+
     return $(this).each(function () {
       var $div = $(this),
-        $input = $div.find('input[type="text"]'),
-        $field_with_icon = $input.closest('.field_with_icon'),
+        $field_with_icon = $div.find('.field_with_icon'),
+        $input = $field_with_icon.find('input.text'),
         $list = $div.find('ol.search-selected,ul.search-selected'),
-        $search_loading_icon = $input.siblings('.icon-search'),
-        name = $input.attr('name'),
-        position_name = $input.siblings('.position').attr('name'),
+        $search_loading_icon = $input.siblings('.ss-search'),
+        $template = $div.find('.template'),
 
         this_options = options,
         input_dropdown;
@@ -35,8 +35,7 @@
       }
 
       function unselectable($li) {
-        var $cancel = $('<a class="cancel-link" href="#">' + options.cancel_copy + '</a>'),
-          $destroy = $li.find('.destroy');
+        var $cancel = $('<a class="ss-icon ss-delete cancel-link" href="#">' + options.cancel_copy + '</a>');
         $li.append($cancel);
         if ($destroy.val() && $destroy.val() !== 'false') {
           $li.hide();
@@ -66,11 +65,11 @@
       });
 
       $input.on('livesearch:searching', function () {
-        $search_loading_icon.removeClass('icon-search').addClass('icon-loading-small');
+        $search_loading_icon.removeClass('ss-search').addClass('icon-loading-small');
       });
 
       $input.on('livesearch:results livesearch:ajax_error', function () {
-        $search_loading_icon.removeClass('icon-loading-small').addClass('icon-search');
+        $search_loading_icon.removeClass('icon-loading-small').addClass('ss-search');
       });
 
       $div.on('livesearch:selected', function (e, data) {
