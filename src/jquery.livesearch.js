@@ -59,9 +59,16 @@
           _this.search();
         }, _this.options.delay);
       });
-      this.options.serialize.on('change', function () {
-        _this.search();
-      });
+
+      // Often, process_data is used to create the entire param set, so we
+      // can't trust options.serialize to indicate the interesting form fields
+      // for on change events.
+      if (!this.options.process_data) {
+        this.options.serialize.on('change', function () {
+          _this.search();
+        });
+      }
+
       this.$elem.on('livesearch:suspend', function () {
         _this.active = false;
       });
