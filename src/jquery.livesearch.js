@@ -147,6 +147,10 @@
           error: function () {
             _this.$elem.trigger('livesearch:ajax_error');
             _this.$elem.removeClass('searching');
+          },
+          statusCode: {
+            304 : function () {
+            }
           }
         });
       }
