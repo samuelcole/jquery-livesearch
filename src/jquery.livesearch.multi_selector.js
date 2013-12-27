@@ -46,7 +46,6 @@
       }
 
       $div.addClass('search');
-      $input.attr('name', '');
 
       $list.find('li').each(function () {
         unselectable($(this));
