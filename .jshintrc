@@ -1,0 +1,27 @@
+{
+  //enforcing
+  "bitwise" : true,
+  "curly" : true,
+  "eqeqeq" : true,
+  "es3" : true,
+  "forin" : true,
+  "immed" : true,
+  "indent" : 2,
+  "latedef": true,
+  "newcap" : true,
+  "noarg" : true,
+  "noempty" : true,
+  "plusplus" : true,
+  "quotmark": "single",
+  "trailing" : true,
+  "undef" : true,
+  "unused" : true,
+
+  //relaxive
+  "evil" : true,
+  "sub" : true,
+
+  //environments
+  "browser" : true,
+  "jquery" : true
+}
