@@ -37,18 +37,6 @@
       function unselectable($li) {
         var $cancel = $('<a class="ss-icon ss-delete cancel-link" href="#">' + options.cancel_copy + '</a>');
         $li.append($cancel);
-        if ($destroy.val() && $destroy.val() !== 'false') {
-          $li.hide();
-        }
-        $cancel.click(function (e) {
-          e.preventDefault();
-          $li.fadeOut(function () {
-            $destroy.val('1');
-            if (!$destroy.length) { //new record
-              $li.remove();
-            }
-          });
-        });
       }
 
       function reset() {
@@ -62,6 +50,20 @@
 
       $list.find('li').each(function () {
         unselectable($(this));
+      });
+
+      $div.on('click', 'a.cancel-link', function (e) {
+        var $li = $(this).closest('li'),
+          $destroy = $li.find('.destroy');
+
+        e.preventDefault();
+        $li.fadeOut(function () {
+          if (!$destroy.length) { //new record
+            $li.remove();
+          } else {
+            $destroy.val('1');
+          }
+        });
       });
 
       $input.on('livesearch:searching', function () {
