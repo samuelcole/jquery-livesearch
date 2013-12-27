@@ -55,17 +55,17 @@
 
       handle_close_button.call($text[0]);
 
-      $text.bind('keypress cut paste input livesearch:close_results blur', handle_close_button);
+      $text.on('keypress cut paste input livesearch:close_results blur', handle_close_button);
 
-      $text.bind('livesearch:searching', function () {
+      $text.on('livesearch:searching', function () {
         $search_loading_icon.removeClass('icon-search').addClass('icon-loading-small');
       });
 
-      $text.bind('livesearch:results livesearch:ajax_error', function () {
+      $text.on('livesearch:results livesearch:ajax_error', function () {
         $search_loading_icon.removeClass('icon-loading-small').addClass('icon-search');
       });
 
-      $text.bind('livesearch:results', function () {
+      $text.on('livesearch:results', function () {
         // if this option is set, assume we want the cursor to stay in the input after search is done
         if (options.input_can_submit_on_enter) {
           return;
@@ -73,25 +73,25 @@
         var $results = $text.siblings('.results');
         input_dropdown.select($results.find('li:first'));
       });
-      
+
       function clear_results() {
         $text.val('');
         $text.trigger('livesearch:cancel').trigger('livesearch:close_results');
       }
 
-      $icon_search_clear.bind('click', function () {
+      $icon_search_clear.on('click', function () {
         $text.focus();
         clear_results();
       });
 
-      $text.bind('livesearch:close_results', function () {
+      $text.on('livesearch:close_results', function () {
         $text.siblings('.results').slideUp(function () {
           $(window).resize();
           $(this).trigger('sticky_bar:fix_to_bottom');
         });
       });
 
-      $text.bind('blur', function () {
+      $text.on('blur', function () {
         if ($text.val().length < 3) {
           clear_results();
         }

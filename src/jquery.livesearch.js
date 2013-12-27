@@ -44,10 +44,10 @@
   $.extend(LiveSearch.prototype, {
     _attach: function () {
       var _this = this;
-      
+
       this.$elem.attr('autocomplete', 'off'); //we got this, yall
 
-      this.$elem.bind("keypress cut paste input", function () {
+      this.$elem.on('keypress cut paste input', function () {
         if (!_this.active) { return; }
 
         clearTimeout(timeout);
@@ -55,16 +55,16 @@
           _this.search();
         }, _this.options.delay);
       });
-      this.options.serialize.bind('change', function () {
+      this.options.serialize.on('change', function () {
         _this.search();
       });
-      this.$elem.bind('livesearch:suspend', function () {
+      this.$elem.on('livesearch:suspend', function () {
         _this.active = false;
       });
-      this.$elem.bind('livesearch:activate', function () {
+      this.$elem.on('livesearch:activate', function () {
         _this.active = true;
       });
-      this.$elem.bind('livesearch:cancel', function () {
+      this.$elem.on('livesearch:cancel', function () {
         if (_this.search_xhr) {
           _this.search_xhr.abort();
         }

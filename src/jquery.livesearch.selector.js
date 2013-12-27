@@ -8,7 +8,7 @@
         $hidden_input = options.target_input || $div.find('input[type="hidden"]'),
         $search_loading_icon = $input.siblings('.icon-search'),
         input_dropdown;
-      
+
       $div.addClass('search');
 
       function select() {
@@ -42,21 +42,21 @@
 
       options.url = options.url || $div.closest('form').attr('action');
       input_dropdown = $input.livesearch_input_dropdown(options);
-      
-      $input.bind('livesearch:searching', function () {
+
+      $input.on('livesearch:searching', function () {
         $search_loading_icon.removeClass('icon-search').addClass('icon-loading-small');
       });
-      
-      $input.bind('livesearch:results livesearch:ajax_error', function () {
+
+      $input.on('livesearch:results livesearch:ajax_error', function () {
         $search_loading_icon.removeClass('icon-loading-small').addClass('icon-search');
       });
-      
-      $input.bind('livesearch:results', function () {
+
+      $input.on('livesearch:results', function () {
         var $results = $input.siblings('.results');
         input_dropdown.select($results.find('li:first'));
       });
 
-      $div.bind('livesearch:selected', function (e, data) {
+      $div.on('livesearch:selected', function (e, data) {
         if (!data) {
           return;
         }

@@ -78,7 +78,7 @@
     _attach: function () {
       var _this = this;
 
-      this.$elem.bind('livesearch:results', function (e, results) {
+      this.$elem.on('livesearch:results', function (e, results) {
         if (_this.options.process_results) {
           results = _this.options.process_results(results);
         }
@@ -89,7 +89,7 @@
       this.bind_results();
       this.bind_popstate();
 
-      this.$elem.bind(($.browser.opera ? "keypress" : "keydown") + ".autocomplete", function (e) {
+      this.$elem.on(($.browser.opera ? 'keypress' : 'keydown') + '.autocomplete', function (e) {
         var something_selected = !!_this.$results.find('.selected').length,
           $prev,
           $next,
@@ -172,22 +172,22 @@
     bind_results: function () {
       var _this = this;
 
-      this.$results.find('li').bind('click', function () {
+      this.$results.find('li').on('click', function () {
         _this.select($(this), true);
       });
 
-      this.$results.find('li').bind('mouseover', function () {
+      this.$results.find('li').on('mouseover', function () {
         _this.select($(this));
         _this.unselect_on_mouseout = true;
       });
 
-      this.$results.bind('mouseout', function () {
+      this.$results.on('mouseout', function () {
         if (_this.unselect_on_mouseout) {
           _this.unselect_currently_selected();
         }
       });
 
-      this.$elem.bind('livesearch:reveal_results', function () {
+      this.$elem.on('livesearch:reveal_results', function () {
         _this.reveal_results();
       });
     },

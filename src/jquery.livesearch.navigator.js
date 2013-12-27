@@ -41,7 +41,7 @@
 
       $form.livesearch_pretty_input_dropdown();
 
-      $form.bind('livesearch:selected', function (e, data) {
+      $form.on('livesearch:selected', function (e, data) {
         if (data) {
           window.location = data[1];
         }

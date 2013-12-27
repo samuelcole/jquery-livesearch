@@ -15,7 +15,7 @@
         $search_loading_icon = $input.siblings('.icon-search'),
         name = $input.attr('name'),
         position_name = $input.siblings('.position').attr('name'),
-      
+
         this_options = options,
         input_dropdown;
 
@@ -33,7 +33,7 @@
           }
         });
       }
-      
+
       function unselectable($li) {
         var $cancel = $('<a class="cancel-link" href="#">' + options.cancel_copy + '</a>'),
           $destroy = $li.find('.destroy');
@@ -51,29 +51,29 @@
           });
         });
       }
-      
+
       function reset() {
         $input.val('');
         $field_with_icon.siblings('.results').slideUp();
         $input.trigger('livesearch:cancel');
       }
-      
+
       $div.addClass('search');
       $input.attr('name', '');
-      
+
       $list.find('li').each(function () {
         unselectable($(this));
       });
 
-      $input.bind('livesearch:searching', function () {
+      $input.on('livesearch:searching', function () {
         $search_loading_icon.removeClass('icon-search').addClass('icon-loading-small');
       });
-      
-      $input.bind('livesearch:results livesearch:ajax_error', function () {
+
+      $input.on('livesearch:results livesearch:ajax_error', function () {
         $search_loading_icon.removeClass('icon-loading-small').addClass('icon-search');
       });
 
-      $div.bind('livesearch:selected', function (e, data) {
+      $div.on('livesearch:selected', function (e, data) {
         if (!data) { return; }
         var this_name = name.replace('[template]', '[' + $list.children('li').length + ']'),
           this_position_name = false,
