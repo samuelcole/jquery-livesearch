@@ -166,7 +166,7 @@
       var
         readyState = this.livesearch.search_xhr.readyState,
         search_in_progress = (readyState > 0 && readyState < 4);
-      return this.options.input_can_submit_on_enter && !search_in_progress && this.$elem.is(":focus");
+      return this.options.input_can_submit_on_enter && !search_in_progress && this.$elem.is(':focus');
     },
 
     bind_results: function () {
@@ -278,7 +278,7 @@
         window.history.replaceState(state);
         this.replacing_history_state = false;
       } else {
-        window.history.pushState(state, "", '?' + this.livesearch.last_search);
+        history.pushState(state, '', '?' + this.livesearch.last_search);
       }
     },
 
