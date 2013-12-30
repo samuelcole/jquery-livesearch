@@ -48,5 +48,5 @@ Authors
 _______
 
 * Samuel Cole <sam@samuelcole.name>
-* Lance Ivy (jquery.livesearch.multi_selector.js) <lance@cainlevy.net>
+* Lance Ivy (jquery.livesearch.multi_selector.js, jquery.clone_form_template.js) <lance@cainlevy.net>
 * Alex Cox <alegscogs@gmail.com>

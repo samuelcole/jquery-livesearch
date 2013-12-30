@@ -1,3 +1,7 @@
+/*
+ * dependencies: jquery.clone_form_template.js
+ */
+
 (function ($) {
 
   $.fn.livesearch_multi_selector = function (options) {
@@ -75,23 +79,24 @@
 
       $div.on('livesearch:selected', function (e, data) {
         if (!data) { return; }
-        var this_name = name.replace('[template]', '[' + $list.children('li').length + ']'),
-          this_position_name = false,
-          $li;
-        if (position_name) {
-          this_position_name = position_name.replace('[template]', '[' + $list.children('li').length + ']');
-        }
-        $li = $('<li>' + data[0] + '<input type="hidden" name="' + this_name + '" value="' + data[1] + '"/></li>');
+
+        var $li = $template.clone_form_template();
+
+        $li.find('input.destroy').val(false);
+
+        // embed search values
+        $li.find('.name').html(data[0]);
+        $li.find('.value').val(data[1]);
+
+        $list.append($li);
+
+        // update positions
         if (options.sortable) {
-          if (this_position_name) {
-            $li.append('<input type="hidden" class="position" name="' + this_position_name + '" />');
-          }
           $list.find('input.position').each(function (i) {
             $(this).val(i);
           });
         }
-        $list.append($li);
-        unselectable($li);
+
         reset();
       });
     });
