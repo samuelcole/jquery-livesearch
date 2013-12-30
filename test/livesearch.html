@@ -8,6 +8,8 @@
   <!-- Load local QUnit. -->
   <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
   <script src="../libs/qunit/qunit.js"></script>
+  <script src="../libs/sinon/sinon-1.7.3.js"></script>
+  <script src="../libs/sinon/sinon-qunit-1.0.0.js"></script>
   <!-- Load local lib and tests. -->
   <script src="../src/jquery.livesearch.js"></script>
   <script src="livesearch_test.js"></script>
@@ -19,7 +21,7 @@
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture">
-    <form action="#">
+    <form action="/search">
       <input>
     </form>
   </div>

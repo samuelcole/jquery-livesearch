@@ -23,14 +23,32 @@
   module('jQuery#livesearch', {
     // This will run before each test in this module.
     setup: function() {
-      this.$form = $('#qunit-fixture form');
+      this.$input = $('#qunit-fixture input');
     }
   });
 
   test('is chainable', function() {
     expect(1);
     // Not a bad test to run on collection methods.
-    strictEqual(this.$form.livesearch()[0], this.$form[0], 'should be chainable');
+    strictEqual(this.$input.livesearch()[0], this.$input[0], 'should be chainable');
+  });
+
+  test('calls the server on input', function() {
+    expect(1);
+    var server = this.sandbox.useFakeServer();
+    server.respondWith("GET", "/search",
+                       [200, { "Content-Type": "application/json" },
+                       '["item1", "item2"]']);
+    var callback = this.spy();
+    var delay = 400;
+
+    this.$input.livesearch({delay: delay, minimum_characters: 0});
+    this.$input.on('livesearch:results', callback);
+    this.$input.trigger('input');
+    this.clock.tick(delay);
+    server.respond();
+
+    ok(callback.args[0][1].length);
   });
 
 }(jQuery));
