@@ -51,4 +51,24 @@
     ok(callback.args[0][1].length);
   });
 
+  test('does not call server twice if new input is recieved before the delay', function() {
+    expect(1);
+    var server = this.sandbox.useFakeServer();
+    server.respondWith("GET", "/search",
+                       [200, { "Content-Type": "application/json" },
+                       '["item1", "item2"]']);
+    var callback = this.spy();
+    var delay = 400;
+
+    this.$input.livesearch({delay: delay, minimum_characters: 0});
+    this.$input.on('livesearch:results', callback);
+    this.$input.trigger('input');
+    this.clock.tick(delay / 2);
+    this.$input.trigger('input');
+    this.clock.tick(delay);
+    server.respond();
+
+    strictEqual(callback.callCount, 1);
+  });
+
 }(jQuery));
