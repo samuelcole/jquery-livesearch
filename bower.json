@@ -1,0 +1,26 @@
+{
+  "name": "jquery-livesearch",
+  "version": "1.0.0",
+  "homepage": "https://github.com/samuelcole/jquery-livesearch",
+  "authors": [
+    "Samuel Cole <sam@samuelcole.name>",
+    "Lance Ivy <lance@cainlevy.net>",
+    "Alex Cox <alegscogs@gmail.com>"
+  ],
+  "description": "Basic tools for an autocomplete or filtering selections with an input over AJAX.",
+  "main": "src/jquery.livesearch.js",
+  "keywords": [
+    "ajax",
+    "livesearch",
+    "autocomplete",
+    "search"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
