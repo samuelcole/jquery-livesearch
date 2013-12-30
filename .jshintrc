@@ -1,27 +1,15 @@
 {
-  //enforcing
-  "bitwise" : true,
-  "curly" : true,
-  "eqeqeq" : true,
-  "es3" : true,
-  "forin" : true,
-  "immed" : true,
-  "indent" : 2,
+  "curly": true,
+  "eqeqeq": true,
+  "immed": true,
   "latedef": true,
-  "newcap" : true,
-  "noarg" : true,
-  "noempty" : true,
-  "plusplus" : true,
-  "quotmark": "single",
-  "trailing" : true,
-  "undef" : true,
-  "unused" : true,
-
-  //relaxive
-  "evil" : true,
-  "sub" : true,
-
-  //environments
-  "browser" : true,
-  "jquery" : true
+  "newcap": true,
+  "noarg": true,
+  "sub": true,
+  "undef": true,
+  "unused": true,
+  "boss": true,
+  "eqnull": true,
+  "node": true,
+  "es5": true
 }
