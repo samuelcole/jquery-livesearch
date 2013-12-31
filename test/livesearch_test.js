@@ -35,7 +35,7 @@
 
         this.$input.livesearch(
             $.extend(
-              options, {delay: this.delay, minimum_characters: 0}
+              {delay: this.delay, minimum_characters: 0}, options
             )
           );
         this.$input.on('livesearch:results', callback);
@@ -51,8 +51,6 @@
       };
     }
   });
-
-
 
   test('is chainable', function() {
     expect(1);
@@ -99,12 +97,12 @@
 
     this.type('1');
 
-    ok(callback.callCount, 0);
+    strictEqual(callback.callCount, 0);
   });
 
   test('caches results', function() {
     expect(2);
-    this.makeServer(this);
+    this.makeServer();
     var callback = this.applyLivesearch();
 
     this.type('1');
@@ -113,6 +111,40 @@
 
     strictEqual(callback.args[0][1], callback.args[2][1]);
     strictEqual(this.server.requests.length, 2);
+  });
+
+  test('can be suspended', function () {
+    expect(2);
+    this.makeServer();
+    var callback = this.applyLivesearch();
+
+    this.$input.trigger('livesearch:suspend');
+
+    this.type('1');
+
+    strictEqual(callback.callCount, 0, 'suspended');
+
+    this.$input.trigger('livesearch:activate');
+
+    this.type('1');
+
+    strictEqual(callback.callCount, 1, 'activated');
+  });
+
+  test('searches can be canceled', function () {
+    expect(1);
+    this.makeServer();
+    var callback = this.applyLivesearch();
+
+    this.$input.val('1');
+    this.$input.trigger('input');
+    this.clock.tick(this.delay);
+
+    this.$input.trigger('livesearch:cancel');
+
+    this.server.respond();
+
+    strictEqual(callback.callCount, 0);
   });
 
 }(jQuery));
