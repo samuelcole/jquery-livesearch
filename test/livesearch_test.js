@@ -25,28 +25,34 @@
     setup: function() {
       this.$input = $('#qunit-fixture input');
       this.delay = 400;
+      this.makeServer = function () {
+        this.server = this.sandbox.useFakeServer();
+        this.server.respondWith([200, { "Content-Type": "application/json" },
+                           '["item1", "item2"]']);
+      };
+      this.applyLivesearch = function (options) {
+        var callback = this.spy();
+
+        this.$input.livesearch(
+            $.extend(
+              options, {delay: this.delay, minimum_characters: 0}
+            )
+          );
+        this.$input.on('livesearch:results', callback);
+
+        return callback;
+      };
+
+      this.type = function (val, delay) {
+        this.$input.val(val);
+        this.$input.trigger('input');
+        this.clock.tick(delay || this.delay);
+        this.server.respond();
+      };
     }
   });
 
-  function makeServer(test) {
-    var server = test.sandbox.useFakeServer();
-    server.respondWith([200, { "Content-Type": "application/json" },
-                       '["item1", "item2"]']);
-    return server;
-  }
 
-  function applyLivesearch(test, options) {
-    var callback = test.spy();
-
-    test.$input.livesearch(
-        $.extend(
-          options, {delay: this.delay, minimum_characters: 0}
-        )
-      );
-    test.$input.on('livesearch:results', callback);
-
-    return callback;
-  }
 
   test('is chainable', function() {
     expect(1);
@@ -56,75 +62,57 @@
 
   test('calls the server on input', function() {
     expect(1);
-    var server = makeServer(this);
-    var callback = applyLivesearch(this);
+    this.makeServer();
+    var callback = this.applyLivesearch();
 
-    this.$input.trigger('input');
-    this.clock.tick(this.delay);
-    server.respond();
+    this.type('1');
 
     ok(callback.args[0][1].length);
   });
 
   test('does not search twice if new input is recieved before the delay', function() {
     expect(1);
-    var server = makeServer(this);
-    var callback = applyLivesearch(this);
+    this.makeServer();
+    var callback = this.applyLivesearch();
 
-    this.$input.trigger('input');
-    this.clock.tick(this.delay / 2);
-    this.$input.val('1');
-    this.$input.trigger('input');
-    this.clock.tick(this.delay);
-    server.respond();
+    this.type('1', this.delay / 2);
+    this.type('2');
 
     strictEqual(callback.callCount, 1);
   });
 
   test('does not search twice if the value has not changed', function() {
     expect(1);
-    var server = makeServer(this);
-    var callback = applyLivesearch(this);
+    this.makeServer();
+    var callback = this.applyLivesearch();
 
-    this.$input.trigger('input');
-    this.clock.tick(this.delay / 2);
-    this.$input.trigger('input');
-    this.clock.tick(this.delay);
-    server.respond();
+    this.type('1');
+    this.type('1');
 
     strictEqual(callback.callCount, 1);
   });
 
   test('does not search if the minimum characters are not reached', function() {
     expect(1);
-    var server = makeServer(this);
-    var callback = applyLivesearch(this, {minimum_characters: 1});
+    this.makeServer();
+    var callback = this.applyLivesearch({minimum_characters: 2});
 
-    this.$input.trigger('input');
-    this.clock.tick(this.delay);
-    server.respond();
+    this.type('1');
 
     ok(callback.callCount, 0);
   });
 
   test('caches results', function() {
     expect(2);
-    var server = makeServer(this);
-    var callback = applyLivesearch(this);
+    this.makeServer(this);
+    var callback = this.applyLivesearch();
 
-    function type(val, test) {
-      test.$input.val(val);
-      test.$input.trigger('input');
-      test.clock.tick(test.delay);
-      server.respond();
-    }
-
-    type('1', this);
-    type('2', this);
-    type('1', this);
+    this.type('1');
+    this.type('2');
+    this.type('1');
 
     strictEqual(callback.args[0][1], callback.args[2][1]);
-    strictEqual(server.requests.length, 2);
+    strictEqual(this.server.requests.length, 2);
   });
 
 }(jQuery));
