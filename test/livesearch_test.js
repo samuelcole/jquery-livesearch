@@ -36,8 +36,7 @@
   test('calls the server on input', function() {
     expect(1);
     var server = this.sandbox.useFakeServer();
-    server.respondWith("GET", "/search",
-                       [200, { "Content-Type": "application/json" },
+    server.respondWith([200, { "Content-Type": "application/json" },
                        '["item1", "item2"]']);
     var callback = this.spy();
     var delay = 400;
@@ -54,8 +53,7 @@
   test('does not call server twice if new input is recieved before the delay', function() {
     expect(1);
     var server = this.sandbox.useFakeServer();
-    server.respondWith("GET", "/search",
-                       [200, { "Content-Type": "application/json" },
+    server.respondWith([200, { "Content-Type": "application/json" },
                        '["item1", "item2"]']);
     var callback = this.spy();
     var delay = 400;
@@ -64,6 +62,7 @@
     this.$input.on('livesearch:results', callback);
     this.$input.trigger('input');
     this.clock.tick(delay / 2);
+    this.$input.val('1');
     this.$input.trigger('input');
     this.clock.tick(delay);
     server.respond();
