@@ -89,7 +89,7 @@
       this.bind_results();
       this.bind_popstate();
 
-      this.$elem.on(($.browser.opera ? 'keypress' : 'keydown') + '.autocomplete', function (e) {
+      this.$elem.on('keydown.autocomplete', function (e) {
         var something_selected = !!_this.$results.find('.selected').length,
           $prev,
           $next,
