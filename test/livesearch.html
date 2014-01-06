@@ -20,8 +20,20 @@
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture">
-    <form action="/search">
+    <form action="/search" id="plain">
       <input name="q">
+    </form>
+    <form action="/search" id="with_results">
+      <input name="q">
+      <div class="results">
+        <ul class="result_list"></ul>
+      </div>
+    </form>
+    <form action="/search" id="just_field_with_icon">
+      <div class="field_with_icon">
+        <span class="icon">&nbsp;</span>
+        <input name="q">
+      </div>
     </form>
   </div>
 </body>

@@ -23,7 +23,7 @@
   module('jQuery#livesearch_input_dropdown', {
     // This will run before each test in this module.
     setup: function() {
-      this.$input = $('#qunit-fixture input');
+      this.$input = $('#qunit-fixture #plain input');
       this.delay = 400;
       this.makeServer = function () {
         this.server = this.sandbox.useFakeServer();
@@ -65,11 +65,67 @@
       'should be chainable');
   });
 
-  test('results appear', function () {
+  test('correct markup is added when needed', function () {
+    this.makeServer();
+    this.applyLivesearchInputDropdown();
+    strictEqual($('#plain ul.result_list').length, 1);
+  });
+
+  test('correct markup could already exist', function () {
+    this.$input = $('#qunit-fixture #with_results input');
+    this.makeServer();
+    this.applyLivesearchInputDropdown();
+    strictEqual(
+      $('#with_results ul.result_list').length, 1,
+      'no additional results list was added'
+    );
+  });
+
+  test('the input could be in a .field_with_icon', function () {
+    this.$input = $('#qunit-fixture #just_field_with_icon input');
+    this.makeServer();
+    this.applyLivesearchInputDropdown();
+    strictEqual($('#just_field_with_icon .field_with_icon').siblings('.results').length, 1);
+  });
+
+  test('results from the server appear', function () {
     this.makeServer();
     this.applyLivesearchInputDropdown();
     this.type();
-    ok($('#qunit-fixture ul.result_list'));
+    ok($('#plain .result_list li').length);
+  });
+
+  test('able to specify how to retrieve names from results', function () {
+    expect(2);
+    this.makeServer();
+    this.applyLivesearchInputDropdown({
+      return_name_from_result: function (item) {
+        strictEqual(typeof item, 'string');
+        return 'name';
+    }});
+    this.type();
+    strictEqual($('#plain .result_list li:first').text(), 'name');
+  });
+
+  test('able to manually process entire server response', function () {
+    expect(2);
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function (server_response) {
+      strictEqual(server_response.length, 1);
+      return ['name'];
+    }});
+    this.type();
+    strictEqual($('#plain .result_list li:first').text(), 'name');
+  });
+
+  test('able to manually process entire server response', function () {
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function (server_response) {
+      strictEqual(server_response.length, 1);
+      return ['name'];
+    }});
+    this.type();
+    strictEqual($('#plain .result_list li:first').text(), 'name');
   });
 
 }(jQuery));

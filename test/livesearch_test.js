@@ -23,7 +23,7 @@
   module('jQuery#livesearch', {
     // This will run before each test in this module.
     setup: function() {
-      this.$input = $('#qunit-fixture input');
+      this.$input = $('#qunit-fixture #plain input');
       this.delay = 400;
       this.makeServer = function () {
         this.server = this.sandbox.useFakeServer();

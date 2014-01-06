@@ -56,9 +56,6 @@
 
     this.handle_optional_content();
 
-    // css should do this
-    //this.$results.hide();
-    //this.$results.width(this.$elem.outerWidth());
     this.livesearch = $elem.livesearch(this.options).data('livesearch');
     this._attach();
   }
@@ -198,14 +195,13 @@
     build_result_names_list: function (results) {
       var result_names = [],
         _this = this;
-      $.each(results, function () {
-        var name = this;
+      $.each(results, function (i, result) {
         if (_this.options.return_name_from_result) {
-          name = _this.options.return_name_from_result(this);
-        } else if (this !== 'string') {
-          name = this[0];
+          result = _this.options.return_name_from_result(result);
+        } else if (typeof result !== 'string') {
+          result = result[0];
         }
-        result_names.push(name);
+        result_names.push(result);
       });
 
       return result_names;
@@ -236,9 +232,8 @@
 
       result_names = this.build_result_names_list(results);
 
-      $.each(result_names, function (index) {
-        var name = this,
-          $li = $('<li>' + name + '</li>');
+      $.each(result_names, function (index, name) {
+        var $li = $('<li>' + name + '</li>');
         $li.data('livesearch_result', results[index]);
         $results_ul.append($li);
       });
