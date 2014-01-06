@@ -121,12 +121,15 @@
           // we want to trigger the selected event
           $selected = _this.$results.find('.selected');
 
-          if (!$selected.length && _this.input_can_submit()) {
-            return;
+          if (!_this.input_can_submit()) {
+            e.preventDefault();
           }
 
-          _this.select($selected, true);
-          e.preventDefault();
+          if ($selected.length) {
+            e.preventDefault();
+            _this.select($selected, true);
+          }
+
           break;
         default:
           break;
@@ -163,14 +166,17 @@
       var
         readyState = this.livesearch.search_xhr.readyState,
         search_in_progress = (readyState > 0 && readyState < 4);
-      return this.options.input_can_submit_on_enter && !search_in_progress && this.$elem.is(':focus');
+      return this.options.input_can_submit_on_enter &&
+        !search_in_progress &&
+        this.$elem.is(':focus');
     },
 
     bind_results: function () {
       var _this = this;
 
-      this.$results.find('li').on('click', function () {
+      this.$results.find('li').on('click', function (e) {
         _this.select($(this), true);
+        e.preventDefault();
       });
 
       this.$results.find('li').on('mouseover', function () {
@@ -250,7 +256,7 @@
 
       this.bind_results();
 
-      this.$elem.trigger('livesearch:reveal_results');
+      this.reveal_results();
     },
 
     push_history: function (results) {

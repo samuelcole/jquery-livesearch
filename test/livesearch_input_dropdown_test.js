@@ -118,14 +118,186 @@
     strictEqual($('#plain .result_list li:first').text(), 'name');
   });
 
-  test('able to manually process entire server response', function () {
+  var KEY = {
+    UP: 38,
+    DOWN: 40,
+    DEL: 46,
+    TAB: 9,
+    ENTER: 13,
+    ESC: 27,
+    COMMA: 188,
+    PAGEUP: 33,
+    PAGEDOWN: 34,
+    BACKSPACE: 8
+  };
+
+  function key(keyCode) {
+    var event = jQuery.Event('keydown');
+    event.keyCode = keyCode;
+    $('#plain input').trigger(event);
+    return event;
+  }
+
+  test('pressing up before anything is selected, selects the last item', function () {
     this.makeServer();
-    this.applyLivesearchInputDropdown({process_results: function (server_response) {
-      strictEqual(server_response.length, 1);
-      return ['name'];
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'last'];
     }});
     this.type();
-    strictEqual($('#plain .result_list li:first').text(), 'name');
+    key(KEY.UP);
+    strictEqual($('#plain .result_list li.selected').text(), 'last');
   });
+
+  test('pressing up twice selects the second item', function () {
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'second', 'third'];
+    }});
+    this.type();
+    key(KEY.UP);
+    key(KEY.UP);
+    strictEqual($('#plain .result_list li.selected').text(), 'second');
+  });
+
+  test('pressing up at the beginning of the list does not change selected item', function () {
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'last'];
+    }});
+    this.type();
+    key(KEY.UP);
+    key(KEY.UP);
+    key(KEY.UP);
+    strictEqual($('#plain .result_list li.selected').text(), 'last');
+  });
+
+  test('pressing down before anything is selected, selects the first item', function () {
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'last'];
+    }});
+    this.type();
+    key(KEY.DOWN);
+    strictEqual($('#plain .result_list li.selected').text(), 'first');
+  });
+
+  test('pressing down twice selects the second item', function () {
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'second', 'third'];
+    }});
+    this.type();
+    key(KEY.DOWN);
+    key(KEY.DOWN);
+    strictEqual($('#plain .result_list li.selected').text(), 'second');
+  });
+
+  test('pressing down at the end of the list does not change selected item', function () {
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'last'];
+    }});
+    this.type();
+    key(KEY.DOWN);
+    key(KEY.DOWN);
+    key(KEY.DOWN);
+    strictEqual($('#plain .result_list li.selected').text(), 'first');
+  });
+
+  test('pressing enter before selecting anything does not trigger selected', function () {
+    var callback = this.spy();
+    $('#plain').on('livesearch:selected', callback);
+
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'last'];
+    }});
+    this.type();
+    var e = key(KEY.ENTER);
+    strictEqual(callback.callCount, 0, 'does not trigger selected');
+    ok(e.isDefaultPrevented(), 'default will be prevented');
+  });
+
+  test('pressing enter after selecting something does trigger selected', function () {
+    var callback = this.spy();
+    $('#plain').on('livesearch:selected', callback);
+
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'last'];
+    }});
+    this.type();
+    key(KEY.DOWN);
+    var e = key(KEY.ENTER);
+    strictEqual(callback.callCount, 1, 'does trigger selected');
+    ok(e.isDefaultPrevented(), 'default will be prevented');
+  });
+
+  test('clicking on an item triggers selected', function () {
+    var e = jQuery.Event('click');
+    var callback = this.spy();
+    $('#plain').on('livesearch:selected', callback);
+
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'last'];
+    }});
+    this.type();
+
+    $('#plain .results li:first').trigger(e);
+
+    strictEqual(callback.callCount, 1, 'does trigger selected');
+    ok(e.isDefaultPrevented(), 'default will be prevented');
+  });
+
+  test('pressing a random key only executes default', function () {
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'last'];
+    }});
+    this.type();
+    var e = key(KEY.PAGEUP);
+    ok(!e.isDefaultPrevented(), 'default will not be prevented');
+  });
+
+  test('mouseover gives the .selected class', function () {
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'last'];
+    }});
+    this.type();
+
+    $('#plain .results li:first').trigger('mouseover');
+    ok($('#plain li.selected').length);
+  });
+
+  test('mouseout removes the .selected class', function () {
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function () {
+      return ['first', 'last'];
+    }});
+    this.type();
+
+    $('#plain .results li:first').trigger('mouseover');
+    $('#plain .results li:first').trigger('mouseout');
+    ok(!$('#plain li.selected').length);
+  });
+
+  test('option to allow enter to submit', function () {
+    // jQuery will use the native focus, which demands the document to be in
+    // focus. That's not true in a headless browser.
+    jQuery.find.selectors.filters.focus = function(elem) {
+      var doc = elem.ownerDocument;
+      return elem === doc.activeElement && !!(elem.type || elem.href);
+    };
+
+    this.makeServer();
+    this.applyLivesearchInputDropdown({input_can_submit_on_enter: true});
+    this.type();
+    $('#plain input').focus();
+    var e = key(KEY.ENTER);
+    ok(!e.isDefaultPrevented(), 'default is allowed');
+  });
+
 
 }(jQuery));
