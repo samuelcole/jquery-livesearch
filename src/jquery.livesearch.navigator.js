@@ -39,7 +39,7 @@
     return $(this).each(function () {
       var $form = $(this);
 
-      $form.livesearch_pretty_input_dropdown();
+      $form.livesearch_pretty_input_dropdown(options);
 
       $form.on('livesearch:selected', function (e, data) {
         if (data) {

@@ -14,14 +14,17 @@
   <!-- Load local lib and tests. -->
   <script src="../src/jquery.livesearch.js" data-cover></script>
   <script src="../src/jquery.livesearch.input_dropdown.js" data-cover></script>
+  <script src="../src/jquery.livesearch.pretty_input_dropdown.js" data-cover></script>
+  <script src="../src/jquery.livesearch.navigator.js" data-cover></script>
   <script src="livesearch_test.js"></script>
   <script src="livesearch_input_dropdown_test.js"></script>
+  <script src="livesearch_navigator_test.js"></script>
 </head>
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture">
     <form action="/search" id="plain">
-      <input name="q">
+      <input type="text" name="q">
     </form>
     <form action="/search" id="with_results">
       <input name="q">
