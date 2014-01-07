@@ -20,7 +20,7 @@
       throws(block, [expected], [message])
   */
 
-  module('jQuery#livesearch', {
+  module('jQuery#livesearch_navigator', {
     // This will run before each test in this module.
     setup: function() {
       this.$input = $('#qunit-fixture #plain input');
