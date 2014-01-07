@@ -287,6 +287,7 @@
         $(window).resize();
         _this.$results.trigger('sticky_bar:fix_to_bottom');
         _this.$results.trigger('shifted');
+        _this.$results.trigger('livesearch:revealed_results');
       });
     },
 
