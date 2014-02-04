@@ -70,4 +70,18 @@
     strictEqual($('#plain .result_list li:first').text(), 'name');
   });
 
+  test('navigates to url of selected item', function() {
+    var e = jQuery.Event('click');
+    expect(1);
+    this.makeServer();
+    this.applyLivesearchNavigator({process_results: function () {
+      return ['', '#test'];
+    }});
+    this.type();
+    $('#plain .results li:first').trigger(e);
+    strictEqual(window.location.hash, '#test');
+    // clean up best we can:
+    window.location.hash = '#';
+  });
+
 }(jQuery));
