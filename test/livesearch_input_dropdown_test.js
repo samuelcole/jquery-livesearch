@@ -118,6 +118,26 @@
     strictEqual($('#plain .result_list li:first').text(), 'name');
   });
 
+  test('able to set metadata with counts and see \'see all\' link', function () {
+    expect(1);
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function (server_response) {
+      return { results: ['name'], count: 2 };
+    }});
+    this.type();
+    strictEqual($('#plain .result_list a.see_all').text(), 'see all 2 results');
+  });
+
+  test('no results shows no results div', function () {
+    expect(1);
+    this.makeServer();
+    this.applyLivesearchInputDropdown({process_results: function (server_response) {
+      return [];
+    }});
+    this.type();
+    ok($('#plain .no_results').is(':visible'));
+  });
+
   var KEY = {
     UP: 38,
     DOWN: 40,
