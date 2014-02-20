@@ -81,7 +81,7 @@
     $('#plain .results li:first').trigger(e);
     strictEqual(window.location.hash, '#test');
     // clean up best we can:
-    //window.location.hash = '#';
+    window.location.hash = '#';
   });
 
 }(jQuery));
