@@ -121,7 +121,7 @@
   test('able to set metadata with counts and see \'see all\' link', function () {
     expect(1);
     this.makeServer();
-    this.applyLivesearchInputDropdown({process_results: function (server_response) {
+    this.applyLivesearchInputDropdown({process_results: function () {
       return { results: ['name'], count: 2 };
     }});
     this.type();
@@ -131,7 +131,7 @@
   test('no results shows no results div', function () {
     expect(1);
     this.makeServer();
-    this.applyLivesearchInputDropdown({process_results: function (server_response) {
+    this.applyLivesearchInputDropdown({process_results: function () {
       return [];
     }});
     this.type();
