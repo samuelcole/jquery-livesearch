@@ -16,21 +16,20 @@
     return $clone.removeClass('template').show();
   }
 
-  var placeholder = '-1';
   function update_attrs($element, identifier) {
     if ($element.attr('id')) {
       $element.attr('id',
-        $element.attr('id').replace('_' + placeholder + '_', '_' + identifier + '_')
+        $element.attr('id').replace(/_-?\d_/, '_' + identifier + '_')
       );
     }
     if ($element.attr('for')) {
       $element.attr('for',
-        $element.attr('for').replace('_' + placeholder + '_', '_' + identifier + '_')
+        $element.attr('for').replace(/_-?\d_/, '_' + identifier + '_')
       );
     }
     if ($element.attr('name')) {
       $element.attr('name',
-        $element.attr('name').replace('[' + placeholder + ']', '[' + identifier + ']')
+        $element.attr('name').replace(/\[-?\d\]/, '[' + identifier + ']')
       );
     }
   }
