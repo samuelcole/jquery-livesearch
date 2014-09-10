@@ -28,6 +28,7 @@
       );
     }
     if ($element.attr('name')) {
+      $element.val($('[name="' + $element.attr('name') + '"]').val());
       $element.attr('name',
         $element.attr('name').replace(/\[-?\d\]/, '[' + identifier + ']')
       );
