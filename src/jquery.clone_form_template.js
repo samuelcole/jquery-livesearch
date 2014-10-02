@@ -19,18 +19,18 @@
   function update_attrs($element, identifier) {
     if ($element.attr('id')) {
       $element.attr('id',
-        $element.attr('id').replace(/_-?\d_/, '_' + identifier + '_')
+        $element.attr('id').replace(/_-?\d+_/, '_' + identifier + '_')
       );
     }
     if ($element.attr('for')) {
       $element.attr('for',
-        $element.attr('for').replace(/_-?\d_/, '_' + identifier + '_')
+        $element.attr('for').replace(/_-?\d+_/, '_' + identifier + '_')
       );
     }
     if ($element.attr('name')) {
       $element.val($('[name="' + $element.attr('name') + '"]').val());
       $element.attr('name',
-        $element.attr('name').replace(/\[-?\d\]/, '[' + identifier + ']')
+        $element.attr('name').replace(/\[-?\d+\]/, '[' + identifier + ']')
       );
     }
   }
