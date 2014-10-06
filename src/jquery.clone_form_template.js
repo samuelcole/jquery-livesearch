@@ -1,5 +1,8 @@
 (function ($) {
   $.fn.clone_form_template = function (options) {
+    if (!options) {
+      options = {};
+    }
     return $(this).map(function () {
       return update($(this).clone(), options)[0];
     });
