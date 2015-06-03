@@ -17,14 +17,22 @@ in any way you wish.
 
 Options
 -------
-- delay: number of milliseconds to wait after a keystroke, before sending a request
-- minimum_characters: don't send a request until the user has typed in this number of characters
+
+- delay: number of milliseconds to wait after a keystroke, before sending a request (default: 400)
+- minimum_characters: don't send a request until the user has typed in this number of characters (default: 3)
+- serialize: the form to serialize and submit (default: $(element).closest('form'))
+- client_side_cache: if set to true, when the user types in something they have already typed in before, jQuery-LiveSearch
+  will use the last results it has obtained (default: true)
+- process_data: function to process form data, before making the AJAX call; should accept and return data as query string
+  (default: false)
+- dataType: data type to pass to jQuery.ajax() call (default: 'json')
 
 Bonus features
 --------------
 
 - If the user starts typing before a request is complete, it cancels the original request and starts a new one.
-- If the user types in something they have already typed in before, it uses the last results it has obtained.
+- If the user types in something they have already typed in before, it uses the last results it has obtained
+  (client_side_cache: true).
 - If the user hits enter before they have 'stopped typing' it sends the request immediately (but you have to block the
   form from submitting yourself).
 
