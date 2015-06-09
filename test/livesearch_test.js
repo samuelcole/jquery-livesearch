@@ -224,4 +224,33 @@
     strictEqual(extension, 'json');
   });
 
+  test('fires livesearch:empty event on emptying the input', function() {
+    expect(1);
+    this.makeServer();
+    this.applyLivesearch();
+
+    var eventFired = false;
+    this.$input.on('livesearch:empty', function() {
+      eventFired = true;
+    });
+    this.type('123');
+    this.type('');
+
+    ok(eventFired);
+  });
+
+  test('does not fire livesearch:empty when searching for a non-empty string', function() {
+    expect(1);
+    this.makeServer();
+    this.applyLivesearch();
+
+    var eventNotFired = true;
+    this.$input.on('livesearch:empty', function() {
+      eventNotFired = false;
+    });
+    this.type('123');
+
+    ok(eventNotFired);
+  });
+
 }(jQuery));

@@ -104,7 +104,8 @@
 
     search: function () {
       var _this = this,
-        form_data = this.options.serialize.serialize();
+        form_data = this.options.serialize.serialize(),
+        value_length = this.$elem.val().length;
 
 
       if (this.options.process_data) {
@@ -114,8 +115,12 @@
         }
       }
 
+      if (value_length === 0) {
+        _this.$elem.trigger('livesearch:empty');
+      }
+
       if (form_data === this.last_search) { return; }
-      if (this.$elem.val().length < this.options.minimum_characters) { return; }
+      if (value_length < this.options.minimum_characters) { return; }
 
       if (this.search_xhr) {
         this.search_xhr.abort();
